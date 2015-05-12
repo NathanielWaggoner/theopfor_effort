@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Calculator</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="clear">Clear</string>
+    <string name="history">History</string>
+    <string name="emptyField">0</string>
+</resources>
