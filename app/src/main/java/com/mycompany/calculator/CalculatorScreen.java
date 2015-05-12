@@ -11,8 +11,12 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 
 public class CalculatorScreen extends ActionBarActivity {
+    public static final String[] OPERATIONS = {"+", "-", "*", "/"};
+    public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +50,23 @@ public class CalculatorScreen extends ActionBarActivity {
     }
 
     public void addString(TextView target, final HorizontalScrollView scrollView, String s){
-        if (target.length() == 1 && target.getText().charAt(0) == '0'){
-            target.setText(s);
+
+        boolean op = Arrays.asList(OPERATIONS).contains(s);
+        String text = target.getText().toString();
+
+        if (!op) {
+            if (target.length() == 1 && text.charAt(0) == '0') {
+                target.setText(s);
+            } else {
+                target.setText(text + s);
+            }
         }
         else{
-            target.setText(target.getText() + s);
+            if (target.getText().length() > 0){
+                if (Arrays.asList(NUMBERS).contains(((Character)text.charAt(text.length() - 1)).toString())){
+                    target.setText(text + s);
+                }
+            }
         }
 
         scrollView.post(new Runnable() {
@@ -95,6 +111,9 @@ public class CalculatorScreen extends ActionBarActivity {
                 break;
             case(R.id.Negative):
                 addString(equation, scroll, "-");
+                break;
+            case(R.id.Decimal):
+                addString(equation, scroll, ".");
                 break;
 
             // Numbers
