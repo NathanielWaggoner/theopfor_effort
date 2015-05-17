@@ -15,7 +15,8 @@
             android:text="@string/emptyField"
             android:id="@+id/Equation"
             android:textSize="45sp"
-            android:scrollHorizontally="true" />
+            android:scrollHorizontally="true"
+            android:layout_gravity="end"/>
     </HorizontalScrollView>
     <TextView
         android:layout_width="match_parent"
@@ -57,6 +58,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
                 android:onClick="addChar"/>
+
         </LinearLayout>
 
         <LinearLayout

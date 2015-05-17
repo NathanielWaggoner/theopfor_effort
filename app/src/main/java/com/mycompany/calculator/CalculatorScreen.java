@@ -8,14 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.HorizontalScrollView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.Arrays;
 
 
 public class CalculatorScreen extends ActionBarActivity {
-    public static final String[] OPERATIONS = {"+", "-", "*", "/"};
+    public static final String TAG = "Calculator";
+    public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     @Override
@@ -63,8 +63,39 @@ public class CalculatorScreen extends ActionBarActivity {
         }
         else{
             if (target.getText().length() > 0){
+                // Append numbers normally
                 if (Arrays.asList(NUMBERS).contains(((Character)text.charAt(text.length() - 1)).toString())){
                     target.setText(text + s);
+                }
+                // Be selective with operations
+                else{
+                    // Don't let operations stack
+                    if (text.charAt(text.length()-1) != '-' || (text.charAt(text.length() - 1) == '-' && text.charAt(text.length() - 2) == '-')) {
+                        StringBuilder temp = new StringBuilder(text);
+
+                        // Remove negative if changing operation
+                        if (text.charAt(text.length() - 2) == '-' && text.charAt(text.length() - 1) == '-')
+                            temp.setLength(text.length() - 2);
+                        else{
+                            // otherwise just remove last operation
+                            temp.setLength(text.length() - 1);
+                        }
+
+                        // append the text
+                        temp.append(s);
+                        target.setText(temp.toString());
+                    }
+                    // Negatives are okay
+                    else{
+                        if (s.equals("-"))
+                            target.setText(text + s);
+                        else{
+                            StringBuilder temp = new StringBuilder(text);
+                            temp.setLength(text.length() - 1);
+                            temp.append(s);
+                            target.setText(temp.toString());
+                        }
+                    }
                 }
             }
         }
@@ -82,6 +113,7 @@ public class CalculatorScreen extends ActionBarActivity {
         TextView answer = (TextView) findViewById(R.id.Answer);
         HorizontalScrollView scroll = (HorizontalScrollView) findViewById(R.id.EquationScroll);
 
+        // Find out which button was pressed
         switch (view.getId()){
 
             // Buttons with purpose
@@ -107,7 +139,7 @@ public class CalculatorScreen extends ActionBarActivity {
                 addString(equation, scroll, "^");
                 break;
             case(R.id.Percent):
-                addString(equation, scroll, "+");
+                addString(equation, scroll, "%");
                 break;
             case(R.id.Negative):
                 addString(equation, scroll, "-");
