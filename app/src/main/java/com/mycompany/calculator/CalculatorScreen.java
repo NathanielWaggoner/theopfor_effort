@@ -19,10 +19,21 @@ public class CalculatorScreen extends ActionBarActivity {
     public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
+    /*
+     * Probably a better way to do this but...
+     * here are a bunch of conditionals because guess
+     * who hates stupid crashes? Me.
+     */
+
     // Controls whether or not a decimal can be placed
     public static boolean canDecimal = true;
+    // Make sure empty parentheses aren't a thing...
+    public static boolean canCloseParen = false;
     // Count for parentheses to see if ) can be entered
     public static int parenCount = 0;
+    // Make sure equal is actually possible, none of this "1+" then crash crap...
+    public static boolean canEqual = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,63 +161,87 @@ public class CalculatorScreen extends ActionBarActivity {
                 equation.setText("0");
                 break;
             case(R.id.History): break;
+            case(R.id.Equals):
+                if (canEqual && parenCount == 0)
+                    answerEquation(view);
+                break;
 
             // Operations
             case(R.id.Add):
                 addString(equation, scroll, "+");
                 canDecimal = true;
+                canCloseParen = false;
+                canEqual = false;
                 break;
             case(R.id.Subtract):
                 addString(equation, scroll, "-");
                 canDecimal = true;
+                canCloseParen = false;
+                canEqual = false;
                 break;
             case(R.id.Multiply):
                 addString(equation, scroll, "*");
                 canDecimal = true;
+                canCloseParen = false;
+                canEqual = false;
                 break;
             case(R.id.Divide):
                 addString(equation, scroll, "/");
                 canDecimal = true;
+                canCloseParen = false;
+                canEqual = false;
                 break;
             /*case(R.id.Exponent):
                 addString(equation, scroll, "^");
+                canCloseParen = false;
+                canDecimal = true;
+                canEqual = false;
                 break;*/
             case(R.id.Percent):
                 addString(equation, scroll, "%");
+                canCloseParen = true;
                 break;
             case(R.id.Negative):
                 addString(equation, scroll, "-");
+                canCloseParen = false;
+                canEqual = false;
                 break;
             case(R.id.Decimal):
                 if(canDecimal) {
                     addString(equation, scroll, ".");
                     canDecimal = false;
+                    canEqual = false;
+                    canCloseParen = false;
                 }
                 break;
             case(R.id.OpenParen):
                 addString(equation, scroll, "(");
                 canDecimal = true;
+                canCloseParen = false;
                 parenCount++;
+                canEqual = false;
                 break;
             case(R.id.CloseParen):
-                if (parenCount > 0) {
+                if (parenCount > 0 && canCloseParen) {
                     addString(equation, scroll, ")");
                     canDecimal = true;
                     parenCount--;
+                    canEqual = true;
                 }
                 break;
 
             // Numbers
-            case(R.id.Zero): addString(equation, scroll, "0"); break;
-            case(R.id.One): addString(equation, scroll, "1"); break;
-            case(R.id.Two): addString(equation, scroll, "2"); break;
-            case(R.id.Three): addString(equation, scroll, "3"); break;
-            case(R.id.Four): addString(equation, scroll, "4"); break;
-            case(R.id.Five): addString(equation, scroll, "5"); break;
-            case(R.id.Six): addString(equation, scroll, "6"); break;
-            case(R.id.Seven): addString(equation, scroll, "7"); break;
-            case(R.id.Eight): addString(equation, scroll, "8"); break;
-            case(R.id.Nine): addString(equation, scroll, "9"); break;
+            // LOVE THE CONDITIONALS. YAYYYYYYY
+            case(R.id.Zero): addString(equation, scroll, "0"); canCloseParen = true; canEqual = true; break;
+            case(R.id.One): addString(equation, scroll, "1"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Two): addString(equation, scroll, "2"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Three): addString(equation, scroll, "3"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Four): addString(equation, scroll, "4"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Five): addString(equation, scroll, "5"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Six): addString(equation, scroll, "6"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Seven): addString(equation, scroll, "7"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Eight): addString(equation, scroll, "8"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Nine): addString(equation, scroll, "9"); canCloseParen = true; canEqual = true; break;
         }
     }
 
