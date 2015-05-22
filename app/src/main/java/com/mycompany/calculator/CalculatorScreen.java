@@ -23,6 +23,8 @@ public class CalculatorScreen extends ActionBarActivity {
     public static boolean canDecimal = true;
     // Count for parentheses to see if ) can be entered
     public static int parenCount = 0;
+    // Variable to hold stored number from MS button
+    public static Double memStored = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class CalculatorScreen extends ActionBarActivity {
         boolean op = Arrays.asList(OPERATIONS).contains(s);
         String text = target.getText().toString();
 
-        if (!op) {
+        if (!op || s.equals("(") || s.equals(")")) {
             if (target.length() == 1 && text.charAt(0) == '0') {
                 target.setText(s);
             } else {
@@ -119,6 +121,7 @@ public class CalculatorScreen extends ActionBarActivity {
         final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.EquationScroll);
 
         String result = equation.getText().toString();
+        Log.d(TAG, result);
         result = Core.spaceString(result);
         result = Core.postfixConversion(result);
 
@@ -135,7 +138,7 @@ public class CalculatorScreen extends ActionBarActivity {
         });
     }
 
-    public void addChar(View view){
+    public void buttonPress(View view){
         TextView equation = (TextView) findViewById(R.id.Equation);
         HorizontalScrollView scroll = (HorizontalScrollView) findViewById(R.id.EquationScroll);
 
@@ -147,6 +150,23 @@ public class CalculatorScreen extends ActionBarActivity {
                 equation.setText("0");
                 break;
             case(R.id.History): break;
+
+            case(R.id.MemStore):
+                answerEquation(view);
+                memStored = Double.parseDouble(equation.getText().toString());
+                Log.d(TAG, "Stored " + memStored + " in memory");
+                break;
+            case(R.id.MemRecall):
+                if (memStored!=null) {
+                    DecimalFormat format = new DecimalFormat();
+                    format.setDecimalSeparatorAlwaysShown(false);
+
+                    addString(equation, scroll, format.format(memStored).toString());
+                    Log.d(TAG, "Recalled " + memStored);
+                }
+                break;
+            case(R.id.MemAdd): break;
+            case(R.id.MemSub): break;
 
             // Operations
             case(R.id.Add):
