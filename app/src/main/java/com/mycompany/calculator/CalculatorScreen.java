@@ -120,7 +120,6 @@ public class CalculatorScreen extends ActionBarActivity {
     public void answerEquation(View view){
         TextView equation = (TextView) findViewById(R.id.Equation);
         final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.EquationScroll);
-
         String result = equation.getText().toString();
         Log.d(TAG, result);
         result = Core.spaceString(result);

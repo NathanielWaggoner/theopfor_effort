@@ -16,6 +16,9 @@ public class Core{
 		for (int i=0; i < s.length(); i++){
 			
 			char c = s.charAt(i);
+
+			if (lastChar != null && (lastChar == '%' || lastChar == ')'))
+				newString.append(" * ");
 			
 			if(c == '+' || c == '*' || c=='/' || c == '^' || c == ')'){
 				newString.append(" " + c + " ");
@@ -53,16 +56,21 @@ public class Core{
 				Double pNum = null;
 				int offset = -1;
 				
+				// Loop through the string to calculate blank spaces that need removing
 				while (read.hasNext()){
 					if (read.hasNextDouble()){
 						pNum = read.nextDouble();
+						// Reset offset
 						offset = -1;
 					}
 					else{
+						// It is not a number, so count
 						read.next();
 						offset++;
 					}
 				}
+				
+				// Remove the excess spaces
 				if ((pNum.toString().length() + offset) > newString.length())
 					newString.setLength(0);
 				else
@@ -75,6 +83,7 @@ public class Core{
 					offset = -1;
 					Scanner read2 = new Scanner(newString.toString());
 					
+					// Loop through and calculate offset once again...
 					while (read2.hasNext()){
 						if (read2.hasNextDouble()){
 							oNum = read2.nextDouble();
@@ -85,19 +94,26 @@ public class Core{
 							offset++;
 						}
 					}
+					// Trim it
 					newString.setLength(newString.length() - (oNum.toString().length() + offset));
 					
+					// Original number is now manipulated by the percent, and inserted into the string
 					if (lastOp == '+')
 						newString.append(oNum + (oNum * (pNum / 100)));
 					else
 						newString.append(oNum - (oNum * (pNum / 100)));
 					
+					lastChar = '%';
+					lastOp = '%';
 					read2.close();
 					continue;
 				}
 				else{
+					// For anything else, just convert the whole number to decimal
 					pNum /= 100;
 					newString.append(pNum.toString());
+					lastChar = '%';
+					lastOp = '%';
 					continue;
 				}
 			}
@@ -166,7 +182,6 @@ public class Core{
 			else{
 				// get the character, but ignore spaces
 				String c = read.next().toString();
-
 				if (!c.equals(" ")){
 					
 					// if stack is empty, just put it on
