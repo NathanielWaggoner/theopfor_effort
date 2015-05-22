@@ -46,7 +46,8 @@
                 android:text="@string/delete"
                 android:id="@+id/Delete"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end" />
+                android:gravity="center_vertical|end"
+                android:onClick="addChar" />
         </LinearLayout>
 
     </LinearLayout>

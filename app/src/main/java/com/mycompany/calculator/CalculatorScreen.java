@@ -21,6 +21,8 @@ public class CalculatorScreen extends ActionBarActivity {
 
     // Controls whether or not a decimal can be placed
     public static boolean canDecimal = true;
+    // Count for parentheses to see if ) can be entered
+    public static int parenCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,7 @@ public class CalculatorScreen extends ActionBarActivity {
             case(R.id.Delete):
                 equation.setText("0");
                 break;
+            case(R.id.History): break;
 
             // Operations
             case(R.id.Add):
@@ -180,43 +183,27 @@ public class CalculatorScreen extends ActionBarActivity {
             case(R.id.OpenParen):
                 addString(equation, scroll, "(");
                 canDecimal = true;
+                parenCount++;
                 break;
             case(R.id.CloseParen):
-                addString(equation, scroll, ")");
-                canDecimal = true;
+                if (parenCount > 0) {
+                    addString(equation, scroll, ")");
+                    canDecimal = true;
+                    parenCount--;
+                }
                 break;
 
             // Numbers
-            case(R.id.Zero):
-                addString(equation, scroll, "0");
-                break;
-            case(R.id.One):
-                addString(equation, scroll, "1");
-                break;
-            case(R.id.Two):
-                addString(equation, scroll, "2");
-                break;
-            case(R.id.Three):
-                addString(equation, scroll, "3");
-                break;
-            case(R.id.Four):
-                addString(equation, scroll, "4");
-                break;
-            case(R.id.Five):
-                addString(equation, scroll, "5");
-                break;
-            case(R.id.Six):
-                addString(equation, scroll, "6");
-                break;
-            case(R.id.Seven):
-                addString(equation, scroll, "7");
-                break;
-            case(R.id.Eight):
-                addString(equation, scroll, "8");
-                break;
-            case(R.id.Nine):
-                addString(equation, scroll, "9");
-                break;
+            case(R.id.Zero): addString(equation, scroll, "0"); break;
+            case(R.id.One): addString(equation, scroll, "1"); break;
+            case(R.id.Two): addString(equation, scroll, "2"); break;
+            case(R.id.Three): addString(equation, scroll, "3"); break;
+            case(R.id.Four): addString(equation, scroll, "4"); break;
+            case(R.id.Five): addString(equation, scroll, "5"); break;
+            case(R.id.Six): addString(equation, scroll, "6"); break;
+            case(R.id.Seven): addString(equation, scroll, "7"); break;
+            case(R.id.Eight): addString(equation, scroll, "8"); break;
+            case(R.id.Nine): addString(equation, scroll, "9"); break;
         }
     }
 
