@@ -71,14 +71,6 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="@string/MemStore"
-                android:id="@+id/MemStore"
-                android:layout_weight="1"
-                android:onClick="buttonPress" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
                 android:text="%"
                 android:id="@+id/Percent"
                 android:layout_weight="1"
@@ -123,14 +115,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:text="@string/MemRecall"
-                android:id="@+id/MemRecall"
-                android:layout_weight="1"
-                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -183,14 +167,6 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="@string/MemAdd"
-                android:id="@+id/MemAdd"
-                android:layout_weight="1"
-                android:onClick="buttonPress" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
                 android:text=")"
                 android:id="@+id/CloseParen"
                 android:layout_weight="1"
@@ -235,14 +211,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:text="@string/MemSub"
-                android:id="@+id/MemSub"
-                android:layout_weight="1"
-                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"

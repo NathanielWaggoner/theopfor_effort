@@ -23,8 +23,6 @@ public class CalculatorScreen extends ActionBarActivity {
     public static boolean canDecimal = true;
     // Count for parentheses to see if ) can be entered
     public static int parenCount = 0;
-    // Variable to hold stored number from MS button
-    public static Double memStored = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,23 +151,6 @@ public class CalculatorScreen extends ActionBarActivity {
                 equation.setText("0");
                 break;
             case(R.id.History): break;
-
-            case(R.id.MemStore):
-                answerEquation(view);
-                memStored = Double.parseDouble(equation.getText().toString());
-                Log.d(TAG, "Stored " + memStored + " in memory");
-                break;
-            case(R.id.MemRecall):
-                if (memStored!=null) {
-                    DecimalFormat format = new DecimalFormat();
-                    format.setDecimalSeparatorAlwaysShown(false);
-
-                    addString(equation, scroll, format.format(memStored).toString());
-                    Log.d(TAG, "Recalled " + memStored);
-                }
-                break;
-            case(R.id.MemAdd): break;
-            case(R.id.MemSub): break;
 
             // Operations
             case(R.id.Add):
