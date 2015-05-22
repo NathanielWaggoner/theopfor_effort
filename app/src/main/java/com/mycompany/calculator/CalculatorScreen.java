@@ -75,6 +75,9 @@ public class CalculatorScreen extends ActionBarActivity {
                 if (Arrays.asList(NUMBERS).contains(((Character)text.charAt(text.length() - 1)).toString())){
                     target.setText(text + s);
                 }
+                else if (text.charAt(text.length() - 1) == ')'){
+                    target.setText(text + s);
+                }
                 // Be selective with operations
                 else{
                     // Don't let operations stack
