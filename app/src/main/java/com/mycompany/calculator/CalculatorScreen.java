@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 
@@ -17,6 +18,9 @@ public class CalculatorScreen extends ActionBarActivity {
     public static final String TAG = "Calculator";
     public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
+    // Controls whether or not a decimal can be placed
+    public static boolean canDecimal = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,36 +112,59 @@ public class CalculatorScreen extends ActionBarActivity {
         });
     }
 
+    public void answerEquation(View view){
+        TextView equation = (TextView) findViewById(R.id.Equation);
+        final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.EquationScroll);
+
+        String result = equation.getText().toString();
+        result = Core.spaceString(result);
+        result = Core.postfixConversion(result);
+
+        DecimalFormat format = new DecimalFormat();
+        format.setDecimalSeparatorAlwaysShown(false);
+
+        equation.setText(format.format(Core.solve(result)));
+
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_RIGHT);
+            }
+        });
+    }
+
     public void addChar(View view){
         TextView equation = (TextView) findViewById(R.id.Equation);
-        TextView answer = (TextView) findViewById(R.id.Answer);
         HorizontalScrollView scroll = (HorizontalScrollView) findViewById(R.id.EquationScroll);
 
         // Find out which button was pressed
         switch (view.getId()){
 
             // Buttons with purpose
-            case(R.id.Clear):
+            case(R.id.Delete):
                 equation.setText("0");
-                answer.setText("0");
                 break;
 
             // Operations
             case(R.id.Add):
                 addString(equation, scroll, "+");
+                canDecimal = true;
                 break;
             case(R.id.Subtract):
                 addString(equation, scroll, "-");
+                canDecimal = true;
                 break;
             case(R.id.Multiply):
                 addString(equation, scroll, "*");
+                canDecimal = true;
                 break;
             case(R.id.Divide):
                 addString(equation, scroll, "/");
+                canDecimal = true;
                 break;
-            case(R.id.Exponent):
+            /*case(R.id.Exponent):
                 addString(equation, scroll, "^");
-                break;
+                break;*/
             case(R.id.Percent):
                 addString(equation, scroll, "%");
                 break;
@@ -145,7 +172,18 @@ public class CalculatorScreen extends ActionBarActivity {
                 addString(equation, scroll, "-");
                 break;
             case(R.id.Decimal):
-                addString(equation, scroll, ".");
+                if(canDecimal) {
+                    addString(equation, scroll, ".");
+                    canDecimal = false;
+                }
+                break;
+            case(R.id.OpenParen):
+                addString(equation, scroll, "(");
+                canDecimal = true;
+                break;
+            case(R.id.CloseParen):
+                addString(equation, scroll, ")");
+                canDecimal = true;
                 break;
 
             // Numbers
