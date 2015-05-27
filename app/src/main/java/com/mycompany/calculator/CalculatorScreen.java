@@ -1,12 +1,16 @@
 package com.mycompany.calculator;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
@@ -40,8 +44,28 @@ public class CalculatorScreen extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator_screen);
 
-        TextView equation = (TextView) findViewById(R.id.Equation);
+        final EditText equation = (EditText) findViewById(R.id.Equation);
         equation.setMovementMethod(ScrollingMovementMethod.getInstance());
+        equation.setSelection(equation.getText().length());
+        equation.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return true;
+            }
+        });
+
+        equation.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            public void onFocusChange(View v, boolean hasFocus){
+                equation.requestFocus();
+                Log.d(TAG, "Focus given to Equation");
+            }
+        });
     }
 
     @Override
@@ -66,37 +90,43 @@ public class CalculatorScreen extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addString(TextView target, final HorizontalScrollView scrollView, String s){
+    public void addString(EditText target, String s){
 
         boolean op = Arrays.asList(OPERATIONS).contains(s);
         String text = target.getText().toString();
+
+        // Used for the cursor
+        int start = Math.max(target.getSelectionStart(), 0);
+        int end = Math.max(target.getSelectionEnd(), 0);
+        // Use this for entering in the string:
+        // target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
 
         if (!op || s.equals("(") || s.equals(")")) {
             if (target.length() == 1 && text.charAt(0) == '0') {
                 target.setText(s);
             } else {
-                target.setText(text + s);
+                //target.append(s);
+                target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
             }
         }
-        else{
-            if (target.getText().length() > 0){
+        else {
+            if (target.getText().length() > 0) {
                 // Append numbers normally
-                if (Arrays.asList(NUMBERS).contains(((Character)text.charAt(text.length() - 1)).toString())){
-                    target.setText(text + s);
-                }
-                else if (text.charAt(text.length() - 1) == ')'){
-                    target.setText(text + s);
+                if (Arrays.asList(NUMBERS).contains(((Character) text.charAt(text.length() - 1)).toString())) {
+                    target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
+                } else if (text.charAt(text.length() - 1) == ')') {
+                    target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
                 }
                 // Be selective with operations
-                else{
+                else {
                     // Don't let operations stack
-                    if (text.charAt(text.length()-1) != '-' || (text.charAt(text.length() - 1) == '-' && text.charAt(text.length() - 2) == '-')) {
+                    if (text.charAt(text.length() - 1) != '-' || (text.charAt(text.length() - 1) == '-' && text.charAt(text.length() - 2) == '-')) {
                         StringBuilder temp = new StringBuilder(text);
 
                         // Remove negative if changing operation
                         if (text.charAt(text.length() - 2) == '-' && text.charAt(text.length() - 1) == '-')
                             temp.setLength(text.length() - 2);
-                        else{
+                        else {
                             // otherwise just remove last operation
                             temp.setLength(text.length() - 1);
                         }
@@ -106,10 +136,11 @@ public class CalculatorScreen extends ActionBarActivity {
                         target.setText(temp.toString());
                     }
                     // Negatives are okay
-                    else{
+                    else {
                         if (s.equals("-"))
-                            target.setText(text + s);
-                        else{
+                            //target.append(s);
+                            target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
+                        else {
                             StringBuilder temp = new StringBuilder(text);
                             temp.setLength(text.length() - 1);
                             temp.append(s);
@@ -119,18 +150,10 @@ public class CalculatorScreen extends ActionBarActivity {
                 }
             }
         }
-
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_RIGHT);
-            }
-        });
     }
 
     public void answerEquation(View view){
-        TextView equation = (TextView) findViewById(R.id.Equation);
-        final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.EquationScroll);
+        EditText equation = (EditText) findViewById(R.id.Equation);
         String result = equation.getText().toString();
         Log.d(TAG, result);
         result = Core.spaceString(result);
@@ -140,18 +163,12 @@ public class CalculatorScreen extends ActionBarActivity {
         format.setDecimalSeparatorAlwaysShown(false);
 
         equation.setText(format.format(Core.solve(result)));
-
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_RIGHT);
-            }
-        });
+        equation.requestFocus();
+        equation.setSelection(equation.getText().length());
     }
 
     public void buttonPress(View view){
-        TextView equation = (TextView) findViewById(R.id.Equation);
-        HorizontalScrollView scroll = (HorizontalScrollView) findViewById(R.id.EquationScroll);
+        EditText equation = (EditText) findViewById(R.id.Equation);
 
         // Find out which button was pressed
         switch (view.getId()){
@@ -159,6 +176,8 @@ public class CalculatorScreen extends ActionBarActivity {
             // Buttons with purpose
             case(R.id.Delete):
                 equation.setText("0");
+                equation.requestFocus();
+                equation.setSelection(equation.getText().length());
                 break;
             case(R.id.History): break;
             case(R.id.Equals):
@@ -168,54 +187,54 @@ public class CalculatorScreen extends ActionBarActivity {
 
             // Operations
             case(R.id.Add):
-                addString(equation, scroll, "+");
+                addString(equation, "+");
                 canDecimal = true;
                 canCloseParen = false;
                 canEqual = false;
                 break;
             case(R.id.Subtract):
-                addString(equation, scroll, "-");
+                addString(equation, "-");
                 canDecimal = true;
                 canCloseParen = false;
                 canEqual = false;
                 break;
             case(R.id.Multiply):
-                addString(equation, scroll, "*");
+                addString(equation, "*");
                 canDecimal = true;
                 canCloseParen = false;
                 canEqual = false;
                 break;
             case(R.id.Divide):
-                addString(equation, scroll, "/");
+                addString(equation, "/");
                 canDecimal = true;
                 canCloseParen = false;
                 canEqual = false;
                 break;
             /*case(R.id.Exponent):
-                addString(equation, scroll, "^");
+                addString(equation, "^");
                 canCloseParen = false;
                 canDecimal = true;
                 canEqual = false;
                 break;*/
             case(R.id.Percent):
-                addString(equation, scroll, "%");
+                addString(equation, "%");
                 canCloseParen = true;
                 break;
             case(R.id.Negative):
-                addString(equation, scroll, "-");
+                addString(equation, "-");
                 canCloseParen = false;
                 canEqual = false;
                 break;
             case(R.id.Decimal):
                 if(canDecimal) {
-                    addString(equation, scroll, ".");
+                    addString(equation, ".");
                     canDecimal = false;
                     canEqual = false;
                     canCloseParen = false;
                 }
                 break;
             case(R.id.OpenParen):
-                addString(equation, scroll, "(");
+                addString(equation, "(");
                 canDecimal = true;
                 canCloseParen = false;
                 parenCount++;
@@ -223,7 +242,7 @@ public class CalculatorScreen extends ActionBarActivity {
                 break;
             case(R.id.CloseParen):
                 if (parenCount > 0 && canCloseParen) {
-                    addString(equation, scroll, ")");
+                    addString(equation, ")");
                     canDecimal = true;
                     parenCount--;
                     canEqual = true;
@@ -232,16 +251,16 @@ public class CalculatorScreen extends ActionBarActivity {
 
             // Numbers
             // LOVE THE CONDITIONALS. YAYYYYYYY
-            case(R.id.Zero): addString(equation, scroll, "0"); canCloseParen = true; canEqual = true; break;
-            case(R.id.One): addString(equation, scroll, "1"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Two): addString(equation, scroll, "2"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Three): addString(equation, scroll, "3"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Four): addString(equation, scroll, "4"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Five): addString(equation, scroll, "5"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Six): addString(equation, scroll, "6"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Seven): addString(equation, scroll, "7"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Eight): addString(equation, scroll, "8"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Nine): addString(equation, scroll, "9"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Zero): addString(equation, "0"); canCloseParen = true; canEqual = true; break;
+            case(R.id.One): addString(equation, "1"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Two): addString(equation, "2"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Three): addString(equation, "3"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Four): addString(equation, "4"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Five): addString(equation, "5"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Six): addString(equation, "6"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Seven): addString(equation, "7"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Eight): addString(equation, "8"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Nine): addString(equation, "9"); canCloseParen = true; canEqual = true; break;
         }
     }
 
