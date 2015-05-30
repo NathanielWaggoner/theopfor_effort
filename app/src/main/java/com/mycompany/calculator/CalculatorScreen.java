@@ -15,6 +15,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 
 
@@ -168,7 +169,9 @@ public class CalculatorScreen extends ActionBarActivity {
         result = Core.spaceString(result);
         result = Core.postfixConversion(result);
 
+        // Format decimal to remove trailing zeros on whole numbers
         DecimalFormat format = new DecimalFormat();
+        format.setGroupingSize(0);
         format.setDecimalSeparatorAlwaysShown(false);
 
         equation.setText(format.format(Core.solve(result)));
