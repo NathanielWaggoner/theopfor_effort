@@ -129,7 +129,6 @@ public class CalculatorScreen extends ActionBarActivity {
 
                         // Remove negative if changing operation
                         if (text.charAt(start - 2) == '-' && text.charAt(start - 1) == '-') {
-                            //temp.setLength(text.length() - 2);
                             temp.setCharAt(start - 2, s.charAt(0));
                             temp.deleteCharAt(start - 1);
                             target.setText(temp.toString());
@@ -138,7 +137,6 @@ public class CalculatorScreen extends ActionBarActivity {
                         }
                         else {
                             // otherwise just remove last operation
-                            //temp.setLength(text.length() - 1);
                             temp.setCharAt(start - 1, s.charAt(0));
                             target.setText(temp.toString());
                             target.requestFocus();
