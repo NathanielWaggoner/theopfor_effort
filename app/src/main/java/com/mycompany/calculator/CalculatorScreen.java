@@ -62,8 +62,8 @@ public class CalculatorScreen extends ActionBarActivity {
             }
         });
 
-        equation.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-            public void onFocusChange(View v, boolean hasFocus){
+        equation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
                 equation.requestFocus();
                 Log.d(TAG, "Focus given to Equation");
             }
@@ -116,28 +116,34 @@ public class CalculatorScreen extends ActionBarActivity {
         else {
             if (target.getText().length() > 0) {
                 // Append numbers normally
-                if (Arrays.asList(NUMBERS).contains(((Character) text.charAt(text.length() - 1)).toString())) {
+                if (Arrays.asList(NUMBERS).contains(((Character) text.charAt(start - 1)).toString())) {
                     target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
-                } else if (text.charAt(text.length() - 1) == ')') {
+                } else if (text.charAt(start - 1) == ')') {
                     target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
                 }
                 // Be selective with operations
                 else {
                     // Don't let operations stack
-                    if (text.charAt(text.length() - 1) != '-' || (text.charAt(text.length() - 1) == '-' && text.charAt(text.length() - 2) == '-')) {
+                    if (text.charAt(start - 1) != '-' || (text.charAt(start - 1) == '-' && text.charAt(start - 2) == '-')) {
                         StringBuilder temp = new StringBuilder(text);
 
                         // Remove negative if changing operation
-                        if (text.charAt(text.length() - 2) == '-' && text.charAt(text.length() - 1) == '-')
-                            temp.setLength(text.length() - 2);
+                        if (text.charAt(start - 2) == '-' && text.charAt(start - 1) == '-') {
+                            //temp.setLength(text.length() - 2);
+                            temp.setCharAt(start - 2, s.charAt(0));
+                            temp.deleteCharAt(start - 1);
+                            target.setText(temp.toString());
+                            target.requestFocus();
+                            target.setSelection(start - 1);
+                        }
                         else {
                             // otherwise just remove last operation
-                            temp.setLength(text.length() - 1);
+                            //temp.setLength(text.length() - 1);
+                            temp.setCharAt(start - 1, s.charAt(0));
+                            target.setText(temp.toString());
+                            target.requestFocus();
+                            target.setSelection(start);
                         }
-
-                        // append the text
-                        temp.append(s);
-                        target.setText(temp.toString());
                     }
                     // Negatives are okay
                     else {
@@ -146,9 +152,10 @@ public class CalculatorScreen extends ActionBarActivity {
                             target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
                         else {
                             StringBuilder temp = new StringBuilder(text);
-                            temp.setLength(text.length() - 1);
-                            temp.append(s);
+                            temp.setCharAt(start - 1, s.charAt(0));
                             target.setText(temp.toString());
+                            target.requestFocus();
+                            target.setSelection(start);
                         }
                     }
                 }
@@ -185,7 +192,7 @@ public class CalculatorScreen extends ActionBarActivity {
                 break;
             case(R.id.History): break;
             case(R.id.Equals):
-                if (canEqual && parenCount == 0)
+                //if (canEqual && parenCount == 0)
                     answerEquation(view);
                 break;
 
@@ -230,12 +237,12 @@ public class CalculatorScreen extends ActionBarActivity {
                 canEqual = false;
                 break;
             case(R.id.Decimal):
-                if(canDecimal) {
+                //if(canDecimal) {
                     addString(equation, ".");
                     canDecimal = false;
                     canEqual = false;
                     canCloseParen = false;
-                }
+                //}
                 break;
             case(R.id.OpenParen):
                 addString(equation, "(");
@@ -245,12 +252,12 @@ public class CalculatorScreen extends ActionBarActivity {
                 canEqual = false;
                 break;
             case(R.id.CloseParen):
-                if (parenCount > 0 && canCloseParen) {
+                //if (parenCount > 0 && canCloseParen) {
                     addString(equation, ")");
                     canDecimal = true;
                     parenCount--;
                     canEqual = true;
-                }
+                //}
                 break;
 
             // Numbers
