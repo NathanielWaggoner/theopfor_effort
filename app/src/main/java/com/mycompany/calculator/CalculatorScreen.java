@@ -10,12 +10,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 
 
@@ -67,6 +65,17 @@ public class CalculatorScreen extends ActionBarActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 equation.requestFocus();
                 Log.d(TAG, "Focus given to Equation");
+            }
+        });
+
+        Button delete = (Button) findViewById(R.id.Delete);
+        delete.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                equation.setText("0");
+                equation.requestFocus();
+                equation.setSelection(equation.getText().length());
+                return true;
             }
         });
     }
@@ -187,9 +196,19 @@ public class CalculatorScreen extends ActionBarActivity {
 
             // Buttons with purpose
             case(R.id.Delete):
-                equation.setText("0");
-                equation.requestFocus();
-                equation.setSelection(equation.getText().length());
+                int start = equation.getSelectionStart();
+                if (equation.getText().length() == 1) {
+                    equation.setText("0");
+                    equation.requestFocus();
+                    equation.setSelection(equation.getText().length());
+                }
+                else if (start > 0){
+                    StringBuilder temp = new StringBuilder(equation.getText());
+                    temp.deleteCharAt(start - 1);
+                    equation.setText(temp.toString());
+                    equation.requestFocus();
+                    equation.setSelection(start - 1);
+                }
                 break;
             case(R.id.History): break;
             case(R.id.Equals):
