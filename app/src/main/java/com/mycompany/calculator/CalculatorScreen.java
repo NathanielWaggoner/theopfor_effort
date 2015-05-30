@@ -46,7 +46,9 @@ public class CalculatorScreen extends ActionBarActivity {
 
         final EditText equation = (EditText) findViewById(R.id.Equation);
         equation.setMovementMethod(ScrollingMovementMethod.getInstance());
+        equation.requestFocus();
         equation.setSelection(equation.getText().length());
+
         equation.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -104,6 +106,8 @@ public class CalculatorScreen extends ActionBarActivity {
         if (!op || s.equals("(") || s.equals(")")) {
             if (target.length() == 1 && text.charAt(0) == '0') {
                 target.setText(s);
+                target.requestFocus();
+                target.setSelection(target.getText().length());
             } else {
                 //target.append(s);
                 target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
