@@ -182,6 +182,7 @@ public class CalculatorScreen extends ActionBarActivity {
     public void buttonPress(View view){
         EditText equation = (EditText) findViewById(R.id.Equation);
         int start = equation.getSelectionStart();
+        int end = equation.getSelectionEnd();
 
         // Find out which button was pressed
         switch (view.getId()){
@@ -195,11 +196,33 @@ public class CalculatorScreen extends ActionBarActivity {
                     equation.setSelection(equation.getText().length());
                 }
                 else if (start > 0){
-                    StringBuilder temp = new StringBuilder(equation.getText());
-                    temp.deleteCharAt(start - 1);
-                    equation.setText(temp.toString());
-                    equation.requestFocus();
-                    equation.setSelection(start - 1);
+                    if (start == end) {
+                        StringBuilder temp = new StringBuilder(equation.getText());
+                        temp.deleteCharAt(start - 1);
+                        equation.setText(temp.toString());
+                        equation.requestFocus();
+                        equation.setSelection(start - 1);
+                    }
+                    else{
+                        StringBuilder temp = new StringBuilder(equation.getText());
+                        temp.delete(start, end);
+                        equation.setText(temp.toString());
+                        equation.requestFocus();
+                        equation.setSelection(start);
+                    }
+                }
+                else{
+                    if (start != end){
+                        StringBuilder temp = new StringBuilder(equation.getText());
+                        temp.delete(start, end);
+
+                        if (temp.length() == 0)
+                            temp.append("0");
+
+                        equation.setText(temp.toString());
+                        equation.requestFocus();
+                        equation.setSelection(start);
+                    }
                 }
                 break;
             case(R.id.History): break;
