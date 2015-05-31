@@ -44,7 +44,6 @@ public class CalculatorScreen extends ActionBarActivity {
         setContentView(R.layout.activity_calculator_screen);
 
         final EditText equation = (EditText) findViewById(R.id.Equation);
-        equation.setMovementMethod(ScrollingMovementMethod.getInstance());
         equation.requestFocus();
         equation.setSelection(equation.getText().length());
 
@@ -58,13 +57,6 @@ public class CalculatorScreen extends ActionBarActivity {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
                 return true;
-            }
-        });
-
-        equation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                equation.requestFocus();
-                Log.d(TAG, "Focus given to Equation");
             }
         });
 
@@ -190,13 +182,14 @@ public class CalculatorScreen extends ActionBarActivity {
 
     public void buttonPress(View view){
         EditText equation = (EditText) findViewById(R.id.Equation);
+        int start = equation.getSelectionStart();
 
         // Find out which button was pressed
         switch (view.getId()){
 
             // Buttons with purpose
             case(R.id.Delete):
-                int start = equation.getSelectionStart();
+                //int start = equation.getSelectionStart();
                 if (equation.getText().length() == 1) {
                     equation.setText("0");
                     equation.requestFocus();
@@ -294,5 +287,4 @@ public class CalculatorScreen extends ActionBarActivity {
             case(R.id.Nine): addString(equation, "9"); canCloseParen = true; canEqual = true; break;
         }
     }
-
 }
