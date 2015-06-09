@@ -1,6 +1,7 @@
 package com.mycompany.calculator;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +17,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 
-public class CalculatorScreen extends ActionBarActivity {
+public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.OnFragmentInteractionListener{
     public static final String TAG = "Calculator";
     public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -36,6 +37,7 @@ public class CalculatorScreen extends ActionBarActivity {
     // Make sure equal is actually possible, none of this "1+" then crash crap...
     public static boolean canEqual = true;
 
+    public void onFragmentInteraction(Uri uri){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +185,7 @@ public class CalculatorScreen extends ActionBarActivity {
         EditText equation = (EditText) findViewById(R.id.Equation);
         int start = equation.getSelectionStart();
         int end = equation.getSelectionEnd();
+        Log.d(TAG, "Button Press");
 
         // Find out which button was pressed
         switch (view.getId()){
