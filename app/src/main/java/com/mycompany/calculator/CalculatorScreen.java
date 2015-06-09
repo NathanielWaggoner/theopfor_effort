@@ -22,12 +22,6 @@ public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.O
     public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-    /*
-     * Probably a better way to do this but...
-     * here are a bunch of conditionals because guess
-     * who hates stupid crashes? Me.
-     */
-
     // Controls whether or not a decimal can be placed
     public static boolean canDecimal = true;
     // Make sure empty parentheses aren't a thing...
