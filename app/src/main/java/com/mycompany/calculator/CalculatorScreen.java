@@ -178,7 +178,7 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
         EditText equation = (EditText) findViewById(R.id.Equation);
         String result = equation.getText().toString();
         Log.d(TAG, result);
-        result = Core.spaceString(result);
+        result = Core.spaceString(result, "normal");
         result = Core.postfixConversion(result);
 
         // Format decimal to remove trailing zeros on whole numbers
@@ -270,12 +270,6 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
                 canCloseParen = false;
                 canEqual = false;
                 break;
-            /*case(R.id.Exponent):
-                addString(equation, "^");
-                canCloseParen = false;
-                canDecimal = true;
-                canEqual = false;
-                break;*/
             case(R.id.Percent):
                 addString(equation, "%");
                 canCloseParen = true;
@@ -307,6 +301,25 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
                     parenCount--;
                     canEqual = true;
                 //}
+                break;
+
+            case(R.id.Exponent):
+                addString(equation, "^");
+                break;
+            case(R.id.SquareRoot):
+                addString(equation, "√(");
+                break;
+            case(R.id.Factorial):
+                addString(equation, "!");
+                break;
+            case(R.id.Sine):
+                addString(equation, "sin(");
+                break;
+            case(R.id.Cosine):
+                addString(equation, "cos(");
+                break;
+            case(R.id.Tangent):
+                addString(equation, "tan(");
                 break;
 
             // Numbers

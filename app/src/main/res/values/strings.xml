@@ -7,10 +7,8 @@
     <string name="history">History</string>
     <string name="backspace">Backspace</string>
     <string name="emptyField">0</string>
-    <string name="MemStore">MS</string>
-    <string name="MemRecall">MR</string>
-    <string name="MemAdd">M+</string>
-    <string name="MemSub">M-</string>
+    <string name="ArcButton">Arc</string>
+    <string name="SecondFunctionButton">2nd</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

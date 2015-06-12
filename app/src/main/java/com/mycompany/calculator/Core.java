@@ -5,9 +5,11 @@ import java.util.Arrays;
 
 public class Core{
 	
-	public static final String[] UNARY 	= {"√", "!"};
+	public static final String[] BINARY = {"+", "-", "*", "/", "^"};
+	public static final String[] UNARY = {"√", "!", "log", "cos", "tan", "sin"};
+	public static final String[] FUNCTIONS = {"log", "cos", "tan", "sin"};
 			
-	public static String spaceString(String s){
+	public static String spaceString(String s, String mode){
 		StringBuilder newString = new StringBuilder();
 		Character lastChar = null;
 		Character lastOp = null;
@@ -16,8 +18,9 @@ public class Core{
 		for (int i=0; i < s.length(); i++){
 			
 			char c = s.charAt(i);
-
-			if (lastChar != null && (lastChar == '%' || lastChar == ')'))
+			
+			if (lastChar != null && (lastChar == '%' || lastChar == ')') && 
+					(Arrays.asList(UNARY).contains(c) || Arrays.asList(FUNCTIONS).contains(c) || Arrays.asList(BINARY).contains(c)))
 				newString.append(" * ");
 			
 			if(c == '+' || c == '*' || c=='/' || c == '^' || c == ')'){
@@ -117,7 +120,17 @@ public class Core{
 					continue;
 				}
 			}
-			
+			else if (mode.equals("graphing") && Character.toString(c).matches("[a-z]")){
+				if (lastChar != null && Character.isDigit(lastChar))
+					newString.append(" * " + c + " ");
+				else
+					newString.append(" " + c + " ");
+				
+				lastChar = c;
+				lastOp = c;
+				continue;
+			}
+
 			newString.append(c);
 			if (c != ' ')
 				lastChar = c;
@@ -146,7 +159,12 @@ public class Core{
 	public static boolean checkPrecedence(String op1, String op2){
 		// true if op1 can go on top of op2
 		
-		if (op1.equals("^") || op1.equals("√")){
+		if (Arrays.asList(FUNCTIONS).contains(op1)){
+			if (Arrays.asList(FUNCTIONS).contains(op2))
+				return false;
+			return true;
+		}
+		else if (op1.equals("^") || op1.equals("√")){
 			if (op2.equals("^") || op2.equals("√"))
 				return false;
 			return true;
@@ -250,6 +268,10 @@ public class Core{
 					
 					switch(c){
 						case "√": s.push(Math.sqrt(num1)); break;
+						case "log": s.push(Math.log10(num1)); break;
+						case "sin": s.push(Math.sin(num1)); break;
+						case "cos": s.push(Math.cos(num1)); break;
+						case "tan": s.push(Math.tan(num1)); break;
 					}
 				}
 				else{
