@@ -182,7 +182,7 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
         result = Core.postfixConversion(result);
 
         // Format decimal to remove trailing zeros on whole numbers
-        DecimalFormat format = new DecimalFormat();
+        DecimalFormat format = new DecimalFormat("#.######");
         format.setGroupingSize(0);
         format.setDecimalSeparatorAlwaysShown(false);
 
@@ -320,6 +320,24 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
                 break;
             case(R.id.Tangent):
                 addString(equation, "tan(");
+                break;
+            case(R.id.ScientificNotation):
+                addString(equation, "*10^");
+                break;
+            case(R.id.Logarithm):
+                addString(equation, "log(");
+                break;
+            case(R.id.NaturalLogarithm):
+                addString(equation, "ln(");
+                break;
+            case(R.id.AbsoluteValue):
+                addString(equation, "abs(");
+                break;
+            case(R.id.Pi):
+                addString(equation, "π");
+                break;
+            case(R.id.E):
+                addString(equation, "e");
                 break;
 
             // Numbers

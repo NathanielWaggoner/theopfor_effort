@@ -21,26 +21,33 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/SecondFunction"
                 android:layout_weight="1"
-                android:text="@string/SecondFunctionButton" />
+                android:text="@string/SecondFunctionButton"
+                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/ArcButton"
                 android:layout_weight="1"
-                android:text="@string/ArcButton" />
+                android:text="@string/ArcButton"
+                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button3"
-                android:layout_weight="1" />
+                android:id="@+id/ScientificNotation"
+                android:layout_weight="1"
+                android:text="@string/ScientificNotationButton"
+                android:textAllCaps="true"
+                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button4"
-                android:layout_weight="1" />
+                android:id="@+id/Pi"
+                android:layout_weight="1"
+                android:onClick="buttonPress"
+                android:text="π" />
         </LinearLayout>
 
         <LinearLayout
@@ -68,14 +75,18 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button7"
-                android:layout_weight="1" />
+                android:id="@+id/Logarithm"
+                android:layout_weight="1"
+                android:text="log"
+                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button8"
-                android:layout_weight="1" />
+                android:id="@+id/E"
+                android:layout_weight="1"
+                android:onClick="buttonPress"
+                android:text="E" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,14 +114,17 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button11"
-                android:layout_weight="1" />
+                android:id="@+id/NaturalLogarithm"
+                android:layout_weight="1"
+                android:text="ln"
+                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/button12"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="buttonPress" />
         </LinearLayout>
 
         <LinearLayout
@@ -138,14 +152,17 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button15"
-                android:layout_weight="1" />
+                android:id="@+id/AbsoluteValue"
+                android:layout_weight="1"
+                android:text="@string/AbsoluteValueButton"
+                android:onClick="buttonPress" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/button16"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="buttonPress" />
         </LinearLayout>
 
     </LinearLayout>

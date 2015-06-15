@@ -6,8 +6,8 @@ import java.util.Arrays;
 public class Core{
 	
 	public static final String[] BINARY = {"+", "-", "*", "/", "^"};
-	public static final String[] UNARY = {"√", "!", "log", "cos", "tan", "sin"};
-	public static final String[] FUNCTIONS = {"log", "cos", "tan", "sin"};
+	public static final String[] UNARY = {"√", "!", "log", "ln", "cos", "tan", "sin"};
+	public static final String[] FUNCTIONS = {"log", "cos", "tan", "sin", "abs"};
 			
 	public static String spaceString(String s, String mode){
 		StringBuilder newString = new StringBuilder();
@@ -19,8 +19,8 @@ public class Core{
 			
 			char c = s.charAt(i);
 			
-			if (lastChar != null && (lastChar == '%' || lastChar == ')') && 
-					(Arrays.asList(UNARY).contains(c) || Arrays.asList(FUNCTIONS).contains(c) || Arrays.asList(BINARY).contains(c)))
+			if (lastChar != null && (lastChar == '%' || lastChar == ')' || lastChar == 'π' || lastChar == 'e') && 
+					!(Arrays.asList(UNARY).contains(c) || Arrays.asList(FUNCTIONS).contains(c) || Arrays.asList(BINARY).contains(c)))
 				newString.append(" * ");
 			
 			if(c == '+' || c == '*' || c=='/' || c == '^' || c == ')'){
@@ -120,7 +120,23 @@ public class Core{
 					continue;
 				}
 			}
-			else if (mode.equals("graphing") && Character.toString(c).matches("[a-z]")){
+			else if (c == 'π'){
+				if (lastChar != null && Character.isDigit(lastChar))
+					newString.append(" * ");
+				
+				newString.append(Math.PI);
+				lastChar = 'π';
+				continue;
+			}
+			else if (c == 'e'){
+				if (lastChar != null && Character.isDigit(lastChar))
+					newString.append(" * ");
+				
+				newString.append(Math.E);
+				lastChar = 'e';
+				continue;
+			}
+			else if (mode.equals("graphing") && Character.toString(c).matches("x")){
 				if (lastChar != null && Character.isDigit(lastChar))
 					newString.append(" * " + c + " ");
 				else
@@ -267,11 +283,13 @@ public class Core{
 					Double num1 = s.pop();
 					
 					switch(c){
-						case "√": s.push(Math.sqrt(num1)); break;
-						case "log": s.push(Math.log10(num1)); break;
-						case "sin": s.push(Math.sin(num1)); break;
-						case "cos": s.push(Math.cos(num1)); break;
-						case "tan": s.push(Math.tan(num1)); break;
+						case "√": 	s.push(Math.sqrt(num1)); 	break;
+						case "log": s.push(Math.log10(num1)); 	break;
+						case "ln":	s.push(Math.log(num1)); 	break;
+						case "sin": s.push(Math.sin(num1)); 	break;
+						case "cos": s.push(Math.cos(num1)); 	break;
+						case "tan": s.push(Math.tan(num1)); 	break;
+						case "abs": s.push(Math.abs(num1));		break;
 					}
 				}
 				else{
