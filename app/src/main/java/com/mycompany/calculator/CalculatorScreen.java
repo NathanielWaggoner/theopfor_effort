@@ -2,13 +2,7 @@ package com.mycompany.calculator;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,7 +17,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 
-public class CalculatorScreen extends FragmentActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener{
+public class CalculatorScreen extends FragmentActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
     public static final String TAG = "Calculator";
     public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -37,22 +31,12 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
     // Make sure equal is actually possible, none of this "1+" then crash crap...
     public static boolean canEqual = true;
 
-    // ViewPager variables
-    private static final int VIEWPAGER_NUM_PAGES = 2;
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
-
     public void onFragmentInteraction(Uri uri){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator_screen);
-
-        // Make ViewPager work
-        mPager = (ViewPager) findViewById(R.id.KeypadSlider);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
 
         final EditText equation = (EditText) findViewById(R.id.Equation);
         equation.requestFocus();
@@ -352,25 +336,6 @@ public class CalculatorScreen extends FragmentActivity implements BasicKeypad.On
             case(R.id.Seven): addString(equation, "7"); canCloseParen = true; canEqual = true; break;
             case(R.id.Eight): addString(equation, "8"); canCloseParen = true; canEqual = true; break;
             case(R.id.Nine): addString(equation, "9"); canCloseParen = true; canEqual = true; break;
-        }
-    }
-
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter{
-        public ScreenSlidePagerAdapter(FragmentManager fm){
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position){
-            if (position == 0)
-                return new BasicKeypad();
-            else
-                return new AdvancedKeypad();
-        }
-
-        @Override
-        public int getCount(){
-            return VIEWPAGER_NUM_PAGES;
         }
     }
 }
