@@ -13,7 +13,21 @@
     <string name="AbsoluteValueButton">abs</string>
     <string name="PiSymbol">π</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_graphing_screen">GraphingScreen</string>
+
+    <string-array name="ScreenNames">
+        <item>Calculator\u0020</item>
+        <item>Graphing\u0020</item>
+    </string-array>
+
+    <string-array name="GraphSpinnerItems">
+        <item>Y1</item>
+        <item>Y2</item>
+        <item>Y3</item>
+        <item>Y4</item>
+        <item>Y5</item>
+        <item>Y6</item>
+    </string-array>
 
 </resources>

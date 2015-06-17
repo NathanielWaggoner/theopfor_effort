@@ -46,12 +46,12 @@ public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.O
         // find toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Spinner spinner = (Spinner) findViewById(R.id.ToolbarSpinner);
-        List<String> spinnerItems = new ArrayList<>();
-        spinnerItems.add("Calculator ");
-        spinnerItems.add("Graphing ");
+        String[] screenNames = getResources().getStringArray(R.array.ScreenNames);
+        List<String> spinnerItems = new ArrayList<>(Arrays.asList(screenNames));
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getSupportActionBar().getThemedContext(), R.layout.spinner_layout, spinnerItems);
         arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
