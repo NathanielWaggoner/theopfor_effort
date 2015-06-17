@@ -26,6 +26,10 @@ public class GraphingScreen extends ActionBarActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        // Make spinner for toolbar
+        Spinner toolbarSpinner = (Spinner) findViewById(R.id.ToolbarSpinner);
+        toolbarSpinner.setAdapter(SharedFunctions.setupToolbar(getSupportActionBar(), getResources()));
+
         // Instantiate spinner for equation name
         Spinner spinner = (Spinner) findViewById(R.id.GraphEquationSpinner);
         String[] graphEquationNames = getResources().getStringArray(R.array.GraphSpinnerItems);

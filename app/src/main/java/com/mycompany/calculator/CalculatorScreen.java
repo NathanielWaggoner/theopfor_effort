@@ -11,15 +11,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
@@ -49,13 +46,9 @@ public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.O
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        // Setup spinner in toolbar
         Spinner spinner = (Spinner) findViewById(R.id.ToolbarSpinner);
-        String[] screenNames = getResources().getStringArray(R.array.ScreenNames);
-        List<String> spinnerItems = new ArrayList<>(Arrays.asList(screenNames));
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getSupportActionBar().getThemedContext(), R.layout.spinner_layout, spinnerItems);
-        arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinner.setAdapter(arrayAdapter);
+        spinner.setAdapter(SharedFunctions.setupToolbar(getSupportActionBar(), getResources()));
 
         final EditText equation = (EditText) findViewById(R.id.Equation);
         equation.requestFocus();
