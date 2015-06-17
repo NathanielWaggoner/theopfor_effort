@@ -3,7 +3,7 @@ package com.mycompany.calculator;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 
-public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
+public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
     public static final String TAG = "Calculator";
     public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
     public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -337,7 +337,7 @@ public class CalculatorScreen extends ActionBarActivity implements BasicKeypad.O
                 break;
 
             // Numbers
-            // LOVE THE CONDITIONALS. YAYYYYYYY
+            // LOVE THE CONDITIONALS.
             case(R.id.Zero): addString(equation, "0"); canCloseParen = true; canEqual = true; break;
             case(R.id.One): addString(equation, "1"); canCloseParen = true; canEqual = true; break;
             case(R.id.Two): addString(equation, "2"); canCloseParen = true; canEqual = true; break;
