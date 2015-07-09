@@ -28,14 +28,14 @@ public class GraphingScreen extends AppCompatActivity {
 
         // Make spinner for toolbar
         Spinner toolbarSpinner = (Spinner) findViewById(R.id.ToolbarSpinner);
-        toolbarSpinner.setAdapter(SharedFunctions.setupToolbar(getSupportActionBar(), getResources()));
+        toolbarSpinner.setAdapter(SharedFunctions.setupSpinner(getSupportActionBar(), getResources()));
 
         // Instantiate spinner for equation name
         Spinner spinner = (Spinner) findViewById(R.id.GraphEquationSpinner);
         String[] graphEquationNames = getResources().getStringArray(R.array.GraphSpinnerItems);
         List<String> graphEquationItems = new ArrayList<>(Arrays.asList(graphEquationNames));
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getSupportActionBar().getThemedContext(), R.layout.support_simple_spinner_dropdown_item, graphEquationItems);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_graphing_layout, graphEquationItems);
         arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
     }
