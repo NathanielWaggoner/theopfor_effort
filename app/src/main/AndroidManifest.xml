@@ -10,7 +10,8 @@
         <activity
             android:name=".CalculatorScreen"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,8 @@
         <activity
             android:name=".GraphingScreen"
             android:label="@string/title_activity_graphing_screen"
-            android:parentActivityName=".CalculatorScreen" >
+            android:parentActivityName=".CalculatorScreen"
+            android:launchMode="singleTask">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.calculator.CalculatorScreen" />

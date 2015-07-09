@@ -16,13 +16,17 @@ public class SharedFunctions{
 
     public static class toolbarSpinnerEvents implements AdapterView.OnItemSelectedListener{
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+            Intent newScreen;
             String selectedItem = parent.getItemAtPosition(pos).toString();
-            Log.d("CALC", "Spinner item: \"" + selectedItem + "\" selected");
+            Log.i("CALC", "Spinner item: \"" + selectedItem + "\" selected");
 
             switch(selectedItem){
-                case "Calculator ": break;
+                case "Calculator ":
+                    newScreen = new Intent(view.getContext(), CalculatorScreen.class);
+                    view.getContext().startActivity(newScreen);
+                    break;
                 case "Graphing ":
-                    Intent newScreen = new Intent(view.getContext(), GraphingScreen.class);
+                    newScreen = new Intent(view.getContext(), GraphingScreen.class);
                     view.getContext().startActivity(newScreen);
                     break;
             }

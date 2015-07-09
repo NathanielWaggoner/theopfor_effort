@@ -26,9 +26,11 @@ public class GraphingScreen extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // Make spinner for toolbar
+        // Make spinner for toolbar and set it to "Graphing"
         Spinner toolbarSpinner = (Spinner) findViewById(R.id.ToolbarSpinner);
         toolbarSpinner.setAdapter(SharedFunctions.setupSpinner(getSupportActionBar(), getResources()));
+        toolbarSpinner.setSelection(1);
+        toolbarSpinner.setOnItemSelectedListener(new SharedFunctions.toolbarSpinnerEvents());
 
         // Instantiate spinner for equation name
         Spinner spinner = (Spinner) findViewById(R.id.GraphEquationSpinner);
