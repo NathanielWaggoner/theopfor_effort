@@ -48,7 +48,8 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
 
         // Setup spinner in toolbar
         Spinner spinner = (Spinner) findViewById(R.id.ToolbarSpinner);
-        spinner.setAdapter(SharedFunctions.setupToolbar(getSupportActionBar(), getResources()));
+        spinner.setAdapter(SharedFunctions.setupSpinner(getSupportActionBar(), getResources()));
+        spinner.setOnItemSelectedListener(new SharedFunctions.toolbarSpinnerEvents());
 
         final EditText equation = (EditText) findViewById(R.id.Equation);
         equation.requestFocus();
