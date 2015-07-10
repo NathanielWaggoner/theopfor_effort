@@ -1,4 +1,4 @@
-package com.mycompany.calculator;
+package org.bitbucket.matthewthomas.calculator;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public class Core{
 				continue;
 			}
 			// Multiplication with parenthesis
-			else if (c == '(' || c == '√'){
+			else if (c == '('){
 				if (lastChar != null && Character.isDigit(lastChar)){
 					newString.append(" * " + c + " ");
 					lastChar = c;
@@ -44,6 +44,12 @@ public class Core{
 					continue;
 				}
 			}
+			else if (c == '√'){
+                newString.append(c + " ");
+                lastChar = c;
+                lastOp = c;
+                continue;
+            }
 			// ensure negative numbers stay negative
 			else if (c == '-'){
 				if (lastChar != null && Character.isDigit(lastChar)){
@@ -180,8 +186,8 @@ public class Core{
 				return false;
 			return true;
 		}
-		else if (op1.equals("^") || op1.equals("√")){
-			if (op2.equals("^") || op2.equals("√"))
+		else if (op1.equals("^") || op1.contains("√")){
+			if (op2.equals("^") || op2.contains("√"))
 				return false;
 			return true;
 		}
@@ -279,11 +285,24 @@ public class Core{
 				
 				String c = read.next().toString();
 				
-				if (Arrays.asList(UNARY).contains(c)){
+				// Root calculation
+				if (c.contains("√")){
+				    Double num1 = s.pop();
+				    if (c.length() == 1){
+				        s.push(Math.sqrt(num1));
+				    }
+				    else{
+    				    StringBuilder temp = new StringBuilder(c);
+                        temp.setLength(c.length() - 1);
+                        Double pow = Double.parseDouble(temp.toString());
+                        s.push(Math.pow(num1, 1 / pow));
+				    }
+				}
+				// Unary operations
+				else if (Arrays.asList(UNARY).contains(c)){
 					Double num1 = s.pop();
 					
 					switch(c){
-						case "√": 	s.push(Math.sqrt(num1)); 	break;
 						case "log": s.push(Math.log10(num1)); 	break;
 						case "ln":	s.push(Math.log(num1)); 	break;
 						case "sin": s.push(Math.sin(num1)); 	break;
@@ -292,6 +311,7 @@ public class Core{
 						case "abs": s.push(Math.abs(num1));		break;
 					}
 				}
+				// Binary operations
 				else{
 					Double num2 = s.pop();
 					Double num1 = s.pop();
