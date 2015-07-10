@@ -1,4 +1,4 @@
-package org.bitbucket.matthewthomas.calculator;
+package com.mycompany.calculator;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.Arrays;

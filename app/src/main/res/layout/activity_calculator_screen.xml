@@ -45,7 +45,7 @@
                 android:id="@+id/History"
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"
-                android:onClick="buttonPress"
+                android:onClick="openHistory"
                 style="@style/Base.Widget.AppCompat.Button" />
 
             <Button

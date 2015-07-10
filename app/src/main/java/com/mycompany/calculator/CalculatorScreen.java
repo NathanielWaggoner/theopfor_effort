@@ -1,6 +1,9 @@
 package com.mycompany.calculator;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +19,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
@@ -33,12 +38,18 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
     // Make sure equal is actually possible, none of this "1+" then crash crap...
     public static boolean canEqual = true;
 
+    // Create a history object to store the history
+    public History history;
+
     public void onFragmentInteraction(Uri uri){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator_screen);
+
+        // Initialize history
+        history = new History(5);
 
         // find toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -51,6 +62,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         spinner.setAdapter(SharedFunctions.setupSpinner(getSupportActionBar(), getResources()));
         spinner.setOnItemSelectedListener(new SharedFunctions.toolbarSpinnerEvents());
 
+        // Initialize equation entry parameters
         final EditText equation = (EditText) findViewById(R.id.Equation);
         equation.requestFocus();
         equation.setSelection(equation.getText().length());
@@ -68,6 +80,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
             }
         });
 
+        // Long hold delete
         Button delete = (Button) findViewById(R.id.Delete);
         delete.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -173,17 +186,19 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
 
     public void answerEquation(View view){
         EditText equation = (EditText) findViewById(R.id.Equation);
-        String result = equation.getText().toString();
-        Log.d(TAG, result);
-        result = Core.spaceString(result, "normal");
+        String text = equation.getText().toString();
+        Log.d(TAG, text);
+        String result = Core.spaceString(text, "normal");
         result = Core.postfixConversion(result);
 
         // Format decimal to remove trailing zeros on whole numbers
         DecimalFormat format = new DecimalFormat("#.######");
         format.setGroupingSize(0);
         format.setDecimalSeparatorAlwaysShown(false);
+        String finalAnswer = format.format(Core.solve(result));
 
-        equation.setText(format.format(Core.solve(result)));
+        history.addItem(text, Double.parseDouble(finalAnswer));
+        equation.setText(finalAnswer);
         equation.requestFocus();
         equation.setSelection(equation.getText().length());
     }
@@ -350,5 +365,35 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
             case(R.id.Eight): addString(equation, "8"); canCloseParen = true; canEqual = true; break;
             case(R.id.Nine): addString(equation, "9"); canCloseParen = true; canEqual = true; break;
         }
+    }
+
+    public void openHistory(View view){
+        Button historyButton = (Button) view.findViewById(R.id.History);
+        final EditText equation = (EditText) view.findViewById(R.id.Equation);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        int size = history.capacity;
+        List<String> itemList = new ArrayList<String>();
+
+        for (int i = 0; i < history.historyQueue.size(); i++){
+            History.HistoryItem temp = history.getItem(i);
+            itemList.add(temp.getEquation() + "= " + temp.getAnswer());
+        }
+        final CharSequence[] dialogItems = itemList.toArray(new String[itemList.size()]);
+
+        Log.i("History", "History dialog populated");
+
+        dialogBuilder.setTitle(R.string.history);
+        dialogBuilder.setItems(dialogItems, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("History", Integer.toString(which));
+                equation.setText(history.getItem(which).getEquation());
+                dialog.dismiss();
+            }
+        });
+
+
+        AlertDialog dialog = dialogBuilder.create();
+        Log.i("History", "Dialog will be shown");
+        dialog.show();
     }
 }

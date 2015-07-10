@@ -1,4 +1,4 @@
-package org.bitbucket.matthewthomas.calculator;
+package com.mycompany.calculator;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.LinkedList;
