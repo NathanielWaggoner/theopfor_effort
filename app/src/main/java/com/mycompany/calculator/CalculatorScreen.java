@@ -49,7 +49,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         setContentView(R.layout.activity_calculator_screen);
 
         // Initialize history
-        history = new History(5);
+        history = new History(20);
 
         // find toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -368,15 +368,15 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
     }
 
     public void openHistory(View view){
-        Button historyButton = (Button) view.findViewById(R.id.History);
-        final EditText equation = (EditText) view.findViewById(R.id.Equation);
+        Button historyButton = (Button) findViewById(R.id.History);
+        final EditText equation = (EditText) findViewById(R.id.Equation);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         int size = history.capacity;
         List<String> itemList = new ArrayList<String>();
 
         for (int i = 0; i < history.historyQueue.size(); i++){
-            History.HistoryItem temp = history.getItem(i);
-            itemList.add(temp.getEquation() + "= " + temp.getAnswer());
+            History.HistoryItem temp = history.getItem(i + 1);
+            itemList.add(temp.getEquation() + "=" + temp.getAnswer());
         }
         final CharSequence[] dialogItems = itemList.toArray(new String[itemList.size()]);
 
@@ -386,7 +386,8 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         dialogBuilder.setItems(dialogItems, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("History", Integer.toString(which));
-                equation.setText(history.getItem(which).getEquation());
+                String historyText = history.getItem(which+1).getEquation();
+                equation.setText(historyText);
                 dialog.dismiss();
             }
         });
