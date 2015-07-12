@@ -55,7 +55,7 @@
                 android:id="@+id/Delete"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
-                android:onClick="buttonPress"
+                android:onClick="delete"
                 style="@style/Base.Widget.AppCompat.Button" />
         </LinearLayout>
 

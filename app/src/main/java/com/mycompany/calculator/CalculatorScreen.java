@@ -25,17 +25,7 @@ import java.util.List;
 
 public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
     public static final String TAG = "Calculator";
-    public static final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
-    public static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-    // Controls whether or not a decimal can be placed
-    public static boolean canDecimal = true;
-    // Make sure empty parentheses aren't a thing...
-    public static boolean canCloseParen = false;
-    // Count for parentheses to see if ) can be entered
-    public static int parenCount = 0;
-    // Make sure equal is actually possible, none of this "1+" then crash crap...
-    public static boolean canEqual = true;
     // Variable to clear edittext when number pressed after equation solve
     public static boolean solved = false;
 
@@ -116,73 +106,8 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         return super.onOptionsItemSelected(item);
     }
 
-    public void addString(EditText target, String s){
-
-        boolean op = Arrays.asList(OPERATIONS).contains(s);
-        String text = target.getText().toString();
-
-        // Used for the cursor
-        int start = Math.max(target.getSelectionStart(), 0);
-        int end = Math.max(target.getSelectionEnd(), 0);
-        // Use this for entering in the string:
-        // target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
-
-        if (!op || s.equals("(") || s.equals(")")) {
-            if (target.length() == 1 && text.charAt(0) == '0') {
-                target.setText(s);
-                target.requestFocus();
-                target.setSelection(target.getText().length());
-            } else {
-                //target.append(s);
-                target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
-            }
-        }
-        else {
-            if (target.getText().length() > 0) {
-                // Append numbers normally
-                if (Arrays.asList(NUMBERS).contains(((Character) text.charAt(start - 1)).toString())) {
-                    target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
-                } else if (text.charAt(start - 1) == ')') {
-                    target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
-                }
-                // Be selective with operations
-                else {
-                    // Don't let operations stack
-                    if (text.charAt(start - 1) != '-' || (text.charAt(start - 1) == '-' && text.charAt(start - 2) == '-')) {
-                        StringBuilder temp = new StringBuilder(text);
-
-                        // Remove negative if changing operation
-                        if (text.charAt(start - 2) == '-' && text.charAt(start - 1) == '-') {
-                            temp.setCharAt(start - 2, s.charAt(0));
-                            temp.deleteCharAt(start - 1);
-                            target.setText(temp.toString());
-                            target.requestFocus();
-                            target.setSelection(start - 1);
-                        }
-                        else {
-                            // otherwise just remove last operation
-                            temp.setCharAt(start - 1, s.charAt(0));
-                            target.setText(temp.toString());
-                            target.requestFocus();
-                            target.setSelection(start);
-                        }
-                    }
-                    // Negatives are okay
-                    else {
-                        if (s.equals("-"))
-                            //target.append(s);
-                            target.getText().replace(Math.min(start, end), Math.max(start, end), s, 0, s.length());
-                        else {
-                            StringBuilder temp = new StringBuilder(text);
-                            temp.setCharAt(start - 1, s.charAt(0));
-                            target.setText(temp.toString());
-                            target.requestFocus();
-                            target.setSelection(start);
-                        }
-                    }
-                }
-            }
-        }
+    public void delete(View view){
+        Input.backspace((EditText) findViewById(R.id.Equation));
     }
 
     public void answerEquation(View view){
@@ -205,178 +130,26 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         solved = true;
     }
 
-    public void buttonPress(View view){
+    public void buttonPress(View view) {
+        if (view.getId() == R.id.Equals) {
+            answerEquation(view);
+            return;
+        }
+
         EditText equation = (EditText) findViewById(R.id.Equation);
-        int start = equation.getSelectionStart();
-        int end = equation.getSelectionEnd();
-        Log.d(TAG, "Button Press");
-
         final Integer[] NUMBERS = {R.id.Zero, R.id.One, R.id.Two, R.id.Three, R.id.Four, R.id.Five,
-                               R.id.Six, R.id.Seven, R.id.Eight, R.id.Nine};
+                R.id.Six, R.id.Seven, R.id.Eight, R.id.Nine};
 
+        // If button is a number and equation was just solved, clear the box
         if (Arrays.asList(NUMBERS).contains(view.getId()) && solved){
             equation.setText("0");
             Log.i("CALC", "Clearing equation box");
         }
 
-        // Find out which button was pressed
-        switch (view.getId()){
+        String s = Input.getButtonStr(view.getId());
+        Input.addStr(equation, s);
 
-            // Buttons with purpose
-            case(R.id.Delete):
-                //int start = equation.getSelectionStart();
-                if (equation.getText().length() == 1) {
-                    equation.setText("0");
-                    equation.requestFocus();
-                    equation.setSelection(equation.getText().length());
-                }
-                else if (start > 0){
-                    if (start == end) {
-                        StringBuilder temp = new StringBuilder(equation.getText());
-                        temp.deleteCharAt(start - 1);
-                        equation.setText(temp.toString());
-                        equation.requestFocus();
-                        equation.setSelection(start - 1);
-                    }
-                    else{
-                        StringBuilder temp = new StringBuilder(equation.getText());
-                        temp.delete(start, end);
-                        equation.setText(temp.toString());
-                        equation.requestFocus();
-                        equation.setSelection(start);
-                    }
-                }
-                else{
-                    if (start != end){
-                        StringBuilder temp = new StringBuilder(equation.getText());
-                        temp.delete(start, end);
-
-                        if (temp.length() == 0)
-                            temp.append("0");
-
-                        equation.setText(temp.toString());
-                        equation.requestFocus();
-                        equation.setSelection(start);
-                    }
-                }
-                break;
-            case(R.id.Equals):
-                //if (canEqual && parenCount == 0)
-                    answerEquation(view);
-                break;
-
-            // Operations
-            /*TODO: Condense to addString(buttonText)*/
-            case(R.id.Add):
-                addString(equation, "+");
-                canDecimal = true;
-                canCloseParen = false;
-                canEqual = false;
-                break;
-            case(R.id.Subtract):
-                addString(equation, "-");
-                canDecimal = true;
-                canCloseParen = false;
-                canEqual = false;
-                break;
-            case(R.id.Multiply):
-                addString(equation, "*");
-                canDecimal = true;
-                canCloseParen = false;
-                canEqual = false;
-                break;
-            case(R.id.Divide):
-                addString(equation, "/");
-                canDecimal = true;
-                canCloseParen = false;
-                canEqual = false;
-                break;
-            case(R.id.Percent):
-                addString(equation, "%");
-                canCloseParen = true;
-                break;
-            case(R.id.Negative):
-                addString(equation, "-");
-                canCloseParen = false;
-                canEqual = false;
-                break;
-            case(R.id.Decimal):
-                //if(canDecimal) {
-                    addString(equation, ".");
-                    canDecimal = false;
-                    canEqual = false;
-                    canCloseParen = false;
-                //}
-                break;
-            case(R.id.OpenParen):
-                addString(equation, "(");
-                canDecimal = true;
-                canCloseParen = false;
-                parenCount++;
-                canEqual = false;
-                break;
-            case(R.id.CloseParen):
-                //if (parenCount > 0 && canCloseParen) {
-                    addString(equation, ")");
-                    canDecimal = true;
-                    parenCount--;
-                    canEqual = true;
-                //}
-                break;
-
-            case(R.id.Exponent):
-                addString(equation, "^");
-                break;
-            case(R.id.SquareRoot):
-                addString(equation, "√(");
-                break;
-            case(R.id.Factorial):
-                addString(equation, "!");
-                break;
-            case(R.id.Sine):
-                addString(equation, "sin(");
-                break;
-            case(R.id.Cosine):
-                addString(equation, "cos(");
-                break;
-            case(R.id.Tangent):
-                addString(equation, "tan(");
-                break;
-            case(R.id.ScientificNotation):
-                addString(equation, "*10^");
-                break;
-            case(R.id.Logarithm):
-                addString(equation, "log(");
-                break;
-            case(R.id.NaturalLogarithm):
-                addString(equation, "ln(");
-                break;
-            case(R.id.AbsoluteValue):
-                addString(equation, "abs(");
-                break;
-            case(R.id.Pi):
-                addString(equation, "π");
-                break;
-            case(R.id.E):
-                addString(equation, "e");
-                break;
-
-            // Numbers
-            // LOVE THE CONDITIONALS.
-            case(R.id.Zero): addString(equation, "0"); break;
-            case(R.id.One): addString(equation, "1"); break;
-            case(R.id.Two): addString(equation, "2"); break;
-            case(R.id.Three): addString(equation, "3"); break;
-            case(R.id.Four): addString(equation, "4"); break;
-            case(R.id.Five): addString(equation, "5"); break;
-            case(R.id.Six): addString(equation, "6"); break;
-            case(R.id.Seven): addString(equation, "7"); break;
-            case(R.id.Eight): addString(equation, "8"); break;
-            case(R.id.Nine): addString(equation, "9"); break;
-        }
-
-        if (view.getId() != R.id.Equals)
-            solved = false;
+        solved = false;
     }
 
     public void openHistory(View view){

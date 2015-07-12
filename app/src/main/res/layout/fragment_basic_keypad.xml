@@ -215,7 +215,8 @@
                 android:text="="
                 android:id="@+id/Equals"
                 android:layout_weight="1"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
