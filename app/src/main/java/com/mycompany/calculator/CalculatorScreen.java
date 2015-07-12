@@ -1,7 +1,6 @@
 package com.mycompany.calculator;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -381,12 +380,11 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
     }
 
     public void openHistory(View view){
-        Button historyButton = (Button) findViewById(R.id.History);
         final EditText equation = (EditText) findViewById(R.id.Equation);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        int size = history.capacity;
-        List<String> itemList = new ArrayList<String>();
+        List<String> itemList = new ArrayList<>();
 
+        // Populate a list to display in the dialog
         for (int i = 0; i < history.historyQueue.size(); i++){
             History.HistoryItem temp = history.getItem(i + 1);
             itemList.add(temp.getEquation() + "=" + temp.getAnswer());
@@ -398,14 +396,19 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         dialogBuilder.setTitle(R.string.history);
         dialogBuilder.setItems(dialogItems, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                // Place equation into equation
                 Log.i("History", Integer.toString(which));
                 String historyText = history.getItem(which+1).getEquation();
                 equation.setText(historyText);
                 dialog.dismiss();
+
+                // Reclaim focus and position cursor
+                equation.requestFocus();
+                equation.setSelection(equation.getText().length());
             }
         });
 
-
+        // Create and display the dialog
         AlertDialog dialog = dialogBuilder.create();
         Log.i("History", "Dialog will be shown");
         dialog.show();
