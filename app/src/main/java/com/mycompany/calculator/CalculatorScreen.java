@@ -37,6 +37,8 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
     public static int parenCount = 0;
     // Make sure equal is actually possible, none of this "1+" then crash crap...
     public static boolean canEqual = true;
+    // Variable to clear edittext when number pressed after equation solve
+    public static boolean solved = false;
 
     // Create a history object to store the history
     public History history;
@@ -201,6 +203,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         equation.setText(finalAnswer);
         equation.requestFocus();
         equation.setSelection(equation.getText().length());
+        solved = true;
     }
 
     public void buttonPress(View view){
@@ -208,6 +211,14 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         int start = equation.getSelectionStart();
         int end = equation.getSelectionEnd();
         Log.d(TAG, "Button Press");
+
+        final Integer[] NUMBERS = {R.id.Zero, R.id.One, R.id.Two, R.id.Three, R.id.Four, R.id.Five,
+                               R.id.Six, R.id.Seven, R.id.Eight, R.id.Nine};
+
+        if (Arrays.asList(NUMBERS).contains(view.getId()) && solved){
+            equation.setText("0");
+            Log.i("CALC", "Clearing equation box");
+        }
 
         // Find out which button was pressed
         switch (view.getId()){
@@ -250,7 +261,6 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
                     }
                 }
                 break;
-            case(R.id.History): break;
             case(R.id.Equals):
                 //if (canEqual && parenCount == 0)
                     answerEquation(view);
@@ -354,17 +364,20 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
 
             // Numbers
             // LOVE THE CONDITIONALS.
-            case(R.id.Zero): addString(equation, "0"); canCloseParen = true; canEqual = true; break;
-            case(R.id.One): addString(equation, "1"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Two): addString(equation, "2"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Three): addString(equation, "3"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Four): addString(equation, "4"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Five): addString(equation, "5"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Six): addString(equation, "6"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Seven): addString(equation, "7"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Eight): addString(equation, "8"); canCloseParen = true; canEqual = true; break;
-            case(R.id.Nine): addString(equation, "9"); canCloseParen = true; canEqual = true; break;
+            case(R.id.Zero): addString(equation, "0"); break;
+            case(R.id.One): addString(equation, "1"); break;
+            case(R.id.Two): addString(equation, "2"); break;
+            case(R.id.Three): addString(equation, "3"); break;
+            case(R.id.Four): addString(equation, "4"); break;
+            case(R.id.Five): addString(equation, "5"); break;
+            case(R.id.Six): addString(equation, "6"); break;
+            case(R.id.Seven): addString(equation, "7"); break;
+            case(R.id.Eight): addString(equation, "8"); break;
+            case(R.id.Nine): addString(equation, "9"); break;
         }
+
+        if (view.getId() != R.id.Equals)
+            solved = false;
     }
 
     public void openHistory(View view){
