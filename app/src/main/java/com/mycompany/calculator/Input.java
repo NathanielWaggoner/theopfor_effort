@@ -211,4 +211,10 @@ class Input{
             }
         }
     }
+
+    public static void clear(EditText equation){
+        equation.setText("0");
+        equation.requestFocus();
+        equation.setSelection(equation.getText().length());
+    }
 }

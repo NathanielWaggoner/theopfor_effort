@@ -76,9 +76,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         delete.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                equation.setText("0");
-                equation.requestFocus();
-                equation.setSelection(equation.getText().length());
+                Input.clear(equation);
                 return true;
             }
         });
