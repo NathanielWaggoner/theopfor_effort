@@ -1,7 +1,9 @@
 package com.mycompany.calculator;
 
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,7 +38,7 @@ public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypa
         Button delete = (Button) findViewById(R.id.Delete);
         delete.setOnLongClickListener(Input.clear);
 
-        Input.initKeypad(toolbar.getRootView(), getSupportFragmentManager());
+        Input.initKeypad(toolbar.getRootView(), getSupportFragmentManager(), true);
     }
 
     @Override

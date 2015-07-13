@@ -67,7 +67,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         Button delete = (Button) findViewById(R.id.Delete);
         delete.setOnLongClickListener(Input.clear);
 
-        Input.initKeypad(toolbar.getRootView(), getSupportFragmentManager());
+        Input.initKeypad(toolbar.getRootView(), getSupportFragmentManager(), false);
     }
 
     @Override

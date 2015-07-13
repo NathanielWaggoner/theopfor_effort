@@ -1,6 +1,7 @@
 package com.mycompany.calculator;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -245,21 +246,29 @@ class Input{
         }
     }
 
-    public static void initKeypad(View v, FragmentManager manager) {
+    public static void initKeypad(View v, FragmentManager manager, boolean graphing) {
         ViewPager mPager = (ViewPager) v.findViewById(R.id.KeypadSlider);
-        PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(manager);
+        PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(manager, graphing);
         mPager.setAdapter(mPagerAdapter);
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm){
+        private boolean graphing;
+
+        public ScreenSlidePagerAdapter(FragmentManager fm, boolean b){
             super(fm);
+            graphing = b;
         }
 
         @Override
         public Fragment getItem(int position){
-            if (position == 0)
-                return new BasicKeypad();
+            if (position == 0) {
+                Bundle args = new Bundle();
+                args.putBoolean("GRAPHING", graphing);
+                BasicKeypad b = new BasicKeypad();
+                b.setArguments(args);
+                return b;
+            }
             else
                 return new AdvancedKeypad();
         }
