@@ -1,11 +1,44 @@
 package com.mycompany.calculator;
 
+import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.Arrays;
 
 class Input{
+
+    public static final EditText.OnTouchListener hideSoftKeyboard = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            v.onTouchEvent(event);
+            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+            return true;
+        }
+    };
+
+    public static final Button.OnLongClickListener clear = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            EditText equation = (EditText) v.getRootView().findViewById(R.id.Equation);
+            equation.setText("0");
+            equation.requestFocus();
+            equation.setSelection(equation.getText().length());
+            return true;
+        }
+    };
 
     public static String getButtonStr(int button){
         Log.d("Input", "Button Press");
@@ -103,7 +136,7 @@ class Input{
 
     public static void addStr(EditText target, String s){
         final String[] OPERATIONS = {"+", "-", "*", "/", "^", "%"};
-        final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+        final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "x"};
 
         boolean op = Arrays.asList(OPERATIONS).contains(s);
         String text = target.getText().toString();
@@ -212,9 +245,28 @@ class Input{
         }
     }
 
-    public static void clear(EditText equation){
-        equation.setText("0");
-        equation.requestFocus();
-        equation.setSelection(equation.getText().length());
+    public static void initKeypad(View v, FragmentManager manager) {
+        ViewPager mPager = (ViewPager) v.findViewById(R.id.KeypadSlider);
+        PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(manager);
+        mPager.setAdapter(mPagerAdapter);
+    }
+
+    private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position){
+            if (position == 0)
+                return new BasicKeypad();
+            else
+                return new AdvancedKeypad();
+        }
+
+        @Override
+        public int getCount(){
+            return 2;
+        }
     }
 }

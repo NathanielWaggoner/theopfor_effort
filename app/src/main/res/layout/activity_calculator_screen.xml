@@ -59,14 +59,12 @@
                 style="@style/Base.Widget.AppCompat.Button" />
         </LinearLayout>
 
-        <fragment
-            android:layout_width="fill_parent"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/KeypadSlider"
             android:layout_height="fill_parent"
-            android:name="com.mycompany.calculator.Keypad"
-            android:id="@+id/fragment"
+            android:layout_width="match_parent"
             android:layout_below="@+id/linearLayout2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            tools:layout="@layout/fragment_keypad" />
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
+
 </RelativeLayout>

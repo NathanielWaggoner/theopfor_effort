@@ -1,10 +1,12 @@
 package com.mycompany.calculator;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -62,5 +64,10 @@ public class GraphingScreen extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void launchEntryActivity(View v){
+        Intent newActivity = new Intent(v.getContext(), GraphingEntryScreen.class);
+        v.getContext().startActivity(newActivity);
     }
 }

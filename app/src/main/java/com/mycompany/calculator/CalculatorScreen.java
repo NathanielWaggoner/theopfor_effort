@@ -1,18 +1,20 @@
 package com.mycompany.calculator;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener, Keypad.OnFragmentInteractionListener{
+public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener{
     public static final String TAG = "Calculator";
 
     // Variable to clear edittext when number pressed after equation solve
@@ -58,28 +60,14 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         equation.requestFocus();
         equation.setSelection(equation.getText().length());
 
-        equation.setOnTouchListener(new View.OnTouchListener() {
+        // Prevent soft keyboard from opening
+        equation.setOnTouchListener(Input.hideSoftKeyboard);
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.onTouchEvent(event);
-                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-                return true;
-            }
-        });
-
-        // Long hold delete
+        // Long hold delete to clear
         Button delete = (Button) findViewById(R.id.Delete);
-        delete.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Input.clear(equation);
-                return true;
-            }
-        });
+        delete.setOnLongClickListener(Input.clear);
+
+        Input.initKeypad(toolbar.getRootView(), getSupportFragmentManager());
     }
 
     @Override
