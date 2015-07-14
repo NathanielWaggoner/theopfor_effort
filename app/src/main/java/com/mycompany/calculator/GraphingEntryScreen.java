@@ -1,19 +1,14 @@
 package com.mycompany.calculator;
 
-import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import java.util.Arrays;
 
 
 public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypad.OnFragmentInteractionListener, AdvancedKeypad.OnFragmentInteractionListener {
@@ -27,8 +22,10 @@ public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypa
 
         // find toolbar and remove navigation spinner
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
-        setSupportActionBar(toolbar);
         toolbar.removeView(findViewById(R.id.ToolbarSpinner));
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Keep soft keyboard from opening
         EditText equation = (EditText) findViewById(R.id.Equation);
