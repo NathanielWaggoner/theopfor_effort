@@ -22,7 +22,8 @@
             android:name=".GraphingScreen"
             android:label="@string/title_activity_graphing_screen"
             android:launchMode="singleTask"
-            android:parentActivityName=".CalculatorScreen" >
+            android:parentActivityName=".CalculatorScreen"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.calculator.CalculatorScreen" />
@@ -30,7 +31,8 @@
         <activity
             android:name=".GraphingEntryScreen"
             android:label="@string/title_activity_graphing_entry_screen"
-            android:parentActivityName=".GraphingScreen" >
+            android:parentActivityName=".GraphingScreen"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.calculator.GraphingScreen" />

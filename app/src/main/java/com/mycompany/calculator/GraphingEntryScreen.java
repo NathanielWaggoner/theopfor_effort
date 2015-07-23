@@ -63,6 +63,10 @@ public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypa
     public void buttonPress(View view) {
         EditText equation = (EditText) findViewById(R.id.Equation);
         String s = Input.getButtonStr(view.getId());
+
+        if (view.getId() == R.id.Answer)
+            s = "x";
+
         Input.addStr(equation, s);
     }
 

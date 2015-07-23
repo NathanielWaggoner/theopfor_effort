@@ -19,14 +19,7 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class BasicKeypad extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private boolean graphing;
-    private Button equals;
 
     private OnFragmentInteractionListener mListener;
 
@@ -34,15 +27,13 @@ public class BasicKeypad extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param graphingMode Is Calculator in graphing mode?
      * @return A new instance of fragment BasicKeypad.
      */
-    // TODO: Rename and change types and number of parameters
-    public static BasicKeypad newInstance(Boolean g) {
+    public static BasicKeypad newInstance(Boolean graphingMode) {
         BasicKeypad fragment = new BasicKeypad();
         Bundle args = new Bundle();
-        args.putBoolean("GRAPHING", g);
+        args.putBoolean("GRAPHING", graphingMode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,8 +55,9 @@ public class BasicKeypad extends Fragment {
         View v = inflater.inflate(R.layout.fragment_basic_keypad, container, false);
         if (graphing) {
             Button button = (Button) v.findViewById(R.id.Equals);
-            button.setText("X");
-            Log.i("CALC", "Equal button set to X");
+            button.setText("↲");
+            button.setTextSize(32);
+            Log.i("CALC", "Equal button set to enter");
         }
         return v;
     }

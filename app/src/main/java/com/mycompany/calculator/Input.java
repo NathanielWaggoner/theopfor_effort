@@ -127,9 +127,6 @@ class Input{
             case(R.id.Seven): result = "7"; break;
             case(R.id.Eight): result = "8"; break;
             case(R.id.Nine): result = "9"; break;
-
-            // x entered for Equals when in graphing mode b/c IDs cannot change
-            case(R.id.Equals): result = "x"; break;
         }
         
         return result;
@@ -262,15 +259,18 @@ class Input{
 
         @Override
         public Fragment getItem(int position){
+            Bundle args = new Bundle();
+            args.putBoolean("GRAPHING", graphing);
             if (position == 0) {
-                Bundle args = new Bundle();
-                args.putBoolean("GRAPHING", graphing);
                 BasicKeypad b = new BasicKeypad();
                 b.setArguments(args);
                 return b;
             }
-            else
-                return new AdvancedKeypad();
+            else {
+                AdvancedKeypad a = new AdvancedKeypad();
+                a.setArguments(args);
+                return a;
+            }
         }
 
         @Override

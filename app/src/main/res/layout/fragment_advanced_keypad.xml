@@ -22,7 +22,8 @@
                 android:id="@+id/SecondFunction"
                 android:layout_weight="1"
                 android:text="@string/SecondFunctionButton"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
                 android:id="@+id/ArcButton"
                 android:layout_weight="1"
                 android:text="@string/ArcButton"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -39,7 +41,8 @@
                 android:layout_weight="1"
                 android:text="@string/ScientificNotationButton"
                 android:textAllCaps="true"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -47,7 +50,8 @@
                 android:id="@+id/Pi"
                 android:layout_weight="1"
                 android:onClick="buttonPress"
-                android:text="π" />
+                android:text="π"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,7 +66,8 @@
                 android:id="@+id/Exponent"
                 android:layout_weight="1"
                 android:text="^"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -70,7 +75,8 @@
                 android:id="@+id/Sine"
                 android:layout_weight="1"
                 android:text="sin"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -78,7 +84,8 @@
                 android:id="@+id/Logarithm"
                 android:layout_weight="1"
                 android:text="log"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -86,7 +93,8 @@
                 android:id="@+id/E"
                 android:layout_weight="1"
                 android:onClick="buttonPress"
-                android:text="E" />
+                android:text="E"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +109,8 @@
                 android:id="@+id/SquareRoot"
                 android:layout_weight="1"
                 android:text="√"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -109,7 +118,8 @@
                 android:id="@+id/Cosine"
                 android:layout_weight="1"
                 android:text="Cos"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -117,14 +127,16 @@
                 android:id="@+id/NaturalLogarithm"
                 android:layout_weight="1"
                 android:text="ln"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/button12"
                 android:layout_weight="1"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -139,7 +151,8 @@
                 android:id="@+id/Factorial"
                 android:layout_weight="1"
                 android:text="!"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -147,7 +160,8 @@
                 android:id="@+id/Tangent"
                 android:layout_weight="1"
                 android:text="Tan"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -155,14 +169,17 @@
                 android:id="@+id/AbsoluteValue"
                 android:layout_weight="1"
                 android:text="@string/AbsoluteValueButton"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/button16"
+                android:id="@+id/Answer"
                 android:layout_weight="1"
-                android:onClick="buttonPress" />
+                android:onClick="buttonPress"
+                android:textSize="16sp"
+                android:text="Ans" />
         </LinearLayout>
 
     </LinearLayout>
