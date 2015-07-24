@@ -9,7 +9,7 @@ public class Core{
 	public static final String[] UNARY = {"√", "!", "log", "ln", "cos", "tan", "sin"};
 	public static final String[] FUNCTIONS = {"log", "cos", "tan", "sin", "abs"};
 			
-	public static String spaceString(String s, String mode){
+	public static String spaceString(String s){
 		StringBuilder newString = new StringBuilder();
 		Character lastChar = null;
 		Character lastOp = null;
@@ -142,7 +142,7 @@ public class Core{
 				lastChar = 'e';
 				continue;
 			}
-			else if (mode.equals("graphing") && Character.toString(c).matches("x")){
+			else if (Character.toString(c).matches("x")){
 				if (lastChar != null && Character.isDigit(lastChar))
 					newString.append(" * " + c + " ");
 				else

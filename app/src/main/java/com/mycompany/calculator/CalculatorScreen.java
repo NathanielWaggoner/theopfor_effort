@@ -4,11 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -100,7 +95,7 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         EditText equation = (EditText) findViewById(R.id.Equation);
         String text = equation.getText().toString();
         Log.d(TAG, text);
-        String result = Core.spaceString(text, "normal");
+        String result = Core.spaceString(text);
         result = Core.postfixConversion(result);
 
         // Format decimal to remove trailing zeros on whole numbers
