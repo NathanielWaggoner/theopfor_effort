@@ -15,7 +15,6 @@ public class Equation{
     double getY(double x){
         String e = equation.replaceAll("x", Double.toString(x));
         e = Core.postfixConversion(e);
-        double answer = Core.solve(e);
-        return answer;
+        return Core.solve(e);
     }
 }

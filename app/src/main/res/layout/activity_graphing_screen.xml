@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout3">
 
             <Spinner
                 android:layout_width="wrap_content"
@@ -37,5 +38,14 @@
                 android:onClick="launchEntryActivity" />
 
         </LinearLayout>
-        </RelativeLayout>
+
+        <fragment
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:name="com.mycompany.calculator.GraphTable"
+            android:id="@+id/Table"
+            android:layout_below="@+id/linearLayout3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 </RelativeLayout>

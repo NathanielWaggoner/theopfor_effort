@@ -2,6 +2,7 @@ package com.mycompany.calculator;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,10 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class GraphingScreen extends AppCompatActivity {
+public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFragmentInteractionListener {
 
     SharedPreferences prefs;
     SharedPreferences.Editor prefsEdit;
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

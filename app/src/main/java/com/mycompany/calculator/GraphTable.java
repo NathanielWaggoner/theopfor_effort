@@ -7,6 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -23,9 +30,13 @@ public class GraphTable extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Equation e;
+    private int capacity;
+    private ListView listView;
+    private ListViewAdapter adapter;
+    private ArrayList<HashMap<String, Double>> list;
+    private final String X_KEY = "X";
+    private final String Y1_KEY = "Y1";
 
     private OnFragmentInteractionListener mListener;
 
@@ -33,16 +44,14 @@ public class GraphTable extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param equation Equation to display
      * @return A new instance of fragment GraphTable.
      */
     // TODO: Rename and change types and number of parameters
-    public static GraphTable newInstance(String param1, String param2) {
+    public static GraphTable newInstance(String equation) {
         GraphTable fragment = new GraphTable();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, equation);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,8 +64,10 @@ public class GraphTable extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            e = new Equation(getArguments().getString(ARG_PARAM1));
+        }
+        else{
+            e = new Equation(getActivity().getSharedPreferences("Equations", 0).getString("Y1", "x"));
         }
     }
 
@@ -64,7 +75,23 @@ public class GraphTable extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_graph_table, container, false);
+        View v = inflater.inflate(R.layout.fragment_graph_table, container, false);
+        capacity = 10;
+        listView = (ListView) v.findViewById(R.id.TableListView);
+        list = new ArrayList<>();
+        adapter = new ListViewAdapter(getActivity(), list);
+
+        // Generate N items into an ArrayList and Adapter
+        for (Double i = 0.0; i < capacity; i++){
+            HashMap<String, Double> item = new HashMap<>();
+            item.put(X_KEY, i);
+            item.put(Y1_KEY, e.getY(i));
+            list.add(item);
+        }
+
+        listView.setAdapter(adapter);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,6 +131,57 @@ public class GraphTable extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    private class ListViewAdapter extends BaseAdapter{
+        public ArrayList<HashMap<String, Double>> list;
+        Activity activity;
+
+        private class ViewHolder{
+            TextView xValue;
+            TextView y1;
+        }
+
+        public ListViewAdapter(Activity activity, ArrayList<HashMap<String, Double>> items){
+            super();
+            this.activity = activity;
+            this.list = items;
+        }
+
+        @Override
+        public int getCount(){
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int pos){
+            return list.get(pos);
+        }
+
+        @Override
+        public long getItemId(int pos){
+            return 0;
+        }
+
+        @Override
+        public View getView(int pos, View v, ViewGroup parent){
+            ViewHolder holder = new ViewHolder();
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            HashMap<String, Double> map = list.get(pos);
+
+            if (v == null) {
+                v = inflater.inflate(R.layout.table_graph_row, parent, false);
+            }
+
+            holder.xValue = (TextView) v.findViewById(R.id.XValue);
+            holder.y1 = (TextView) v.findViewById(R.id.Y1Value);
+
+            holder.xValue.setText(Double.toString(map.get(X_KEY)));
+            holder.y1.setText(Double.toString(map.get(Y1_KEY)));
+
+            return v;
+        }
     }
 
 }
