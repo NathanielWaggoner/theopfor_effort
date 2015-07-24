@@ -1,9 +1,11 @@
 package com.mycompany.calculator;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +17,20 @@ public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypa
 
     public void onFragmentInteraction(Uri uri) {}
 
+    SharedPreferences prefs;
+    String key;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator_screen);
+
+        // Setup preferences
+        prefs = getSharedPreferences("Equations", 0);
+
+        // Grab key to use when saving
+        Bundle b = getIntent().getExtras();
+        key = b.getString("key");
 
         // find toolbar and remove navigation spinner
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -30,6 +42,8 @@ public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypa
         // Keep soft keyboard from opening
         EditText equation = (EditText) findViewById(R.id.Equation);
         equation.setOnTouchListener(Input.hideSoftKeyboard);
+        // Set equation to be equal to passed in value
+        equation.setText(b.getString("equation"));
 
         // Long hold delete to clear
         Button delete = (Button) findViewById(R.id.Delete);
@@ -66,8 +80,22 @@ public class GraphingEntryScreen extends AppCompatActivity implements BasicKeypa
 
         if (view.getId() == R.id.Answer)
             s = "x";
+        else if (view.getId() == R.id.Equals){
+            saveEquation();
+            finish();
+        }
 
         Input.addStr(equation, s);
+    }
+
+    public void saveEquation() {
+        EditText equationView = (EditText) findViewById(R.id.Equation);
+        String equation = equationView.getText().toString();
+        SharedPreferences.Editor prefsEdit = prefs.edit();
+        Log.i("Equation Entry", "Saving equation: " + equation);
+
+        prefsEdit.putString(key, equation);
+        prefsEdit.commit();
     }
 
     public void delete(View view){
