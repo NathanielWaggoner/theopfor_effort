@@ -7,13 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**
@@ -28,17 +22,13 @@ public class GraphTable extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private Equation e;
-    private int capacity;
-    private ListView listView;
-    private ListViewAdapter adapter;
-    private ArrayList<HashMap<String, Double>> list;
     private final String X_KEY = "X";
     private final String Y1_KEY = "Y1";
-
+    final int capacity = 10;
     private OnFragmentInteractionListener mListener;
+    Table table;
 
     /**
      * Use this factory method to create a new instance of
@@ -76,21 +66,7 @@ public class GraphTable extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph_table, container, false);
-        capacity = 10;
-        listView = (ListView) v.findViewById(R.id.TableListView);
-        list = new ArrayList<>();
-        adapter = new ListViewAdapter(getActivity(), list);
-
-        // Generate N items into an ArrayList and Adapter
-        for (Double i = 0.0; i < capacity; i++){
-            HashMap<String, Double> item = new HashMap<>();
-            item.put(X_KEY, i);
-            item.put(Y1_KEY, e.getY(i));
-            list.add(item);
-        }
-
-        listView.setAdapter(adapter);
-
+        table = new Table((ListView) v.findViewById(R.id.TableListView), capacity, e, getActivity());
         return v;
     }
 
@@ -130,58 +106,6 @@ public class GraphTable extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
-
-    private class ListViewAdapter extends BaseAdapter{
-        public ArrayList<HashMap<String, Double>> list;
-        Activity activity;
-
-        private class ViewHolder{
-            TextView xValue;
-            TextView y1;
-        }
-
-        public ListViewAdapter(Activity activity, ArrayList<HashMap<String, Double>> items){
-            super();
-            this.activity = activity;
-            this.list = items;
-        }
-
-        @Override
-        public int getCount(){
-            return list.size();
-        }
-
-        @Override
-        public Object getItem(int pos){
-            return list.get(pos);
-        }
-
-        @Override
-        public long getItemId(int pos){
-            return 0;
-        }
-
-        @Override
-        public View getView(int pos, View v, ViewGroup parent){
-            ViewHolder holder = new ViewHolder();
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-
-            HashMap<String, Double> map = list.get(pos);
-
-            if (v == null) {
-                v = inflater.inflate(R.layout.table_graph_row, parent, false);
-            }
-
-            holder.xValue = (TextView) v.findViewById(R.id.XValue);
-            holder.y1 = (TextView) v.findViewById(R.id.Y1Value);
-
-            holder.xValue.setText(Double.toString(map.get(X_KEY)));
-            holder.y1.setText(Double.toString(map.get(Y1_KEY)));
-
-            return v;
-        }
-    }
-
 }
