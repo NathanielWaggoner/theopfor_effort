@@ -53,11 +53,13 @@ class Table{
         list.add(0, item);
     }
 
-    // TODO: Removes value from beginning of adapter
-    public void removeStart() {}
+    public void removeStart() {
+        list.remove(0);
+    }
 
-    // TODO: Removes value from end of adapter
-    public void removeEnd() {}
+    public void removeEnd() {
+        list.remove(size - 1);
+    }
 
     private class ListViewAdapter extends BaseAdapter {
 
