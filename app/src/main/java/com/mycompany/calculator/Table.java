@@ -89,18 +89,19 @@ class Table{
 
         @Override
         public View getView(int pos, View v, ViewGroup parent){
-            ViewHolder holder = new ViewHolder();
-            LayoutInflater inflater = activity.getLayoutInflater();
-
             HashMap<String, Double> map = list.get(pos);
 
             if (v == null) {
+                ViewHolder holder = new ViewHolder();
+                LayoutInflater inflater = activity.getLayoutInflater();
                 v = inflater.inflate(R.layout.table_graph_row, parent, false);
+
+                holder.xValue = (TextView) v.findViewById(R.id.XValue);
+                holder.y1 = (TextView) v.findViewById(R.id.Y1Value);
+                v.setTag(holder);
             }
 
-            holder.xValue = (TextView) v.findViewById(R.id.XValue);
-            holder.y1 = (TextView) v.findViewById(R.id.Y1Value);
-
+            ViewHolder holder = (ViewHolder) v.getTag();
             holder.xValue.setText(Double.toString(map.get(X_KEY)));
             holder.y1.setText(Double.toString(map.get(Y1_KEY)));
 
