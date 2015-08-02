@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ class Table{
     ArrayList<HashMap<String, Double>> list;
     Activity activity;
 
+    boolean alreadyCentered = false;
+
     Table(ListView listView, int capacity, Equation e, Activity a){
         table = listView;
         size = capacity;
@@ -33,6 +36,7 @@ class Table{
         activity = a;
         list = new ArrayList<>();
 
+        table.getViewTreeObserver().addOnGlobalLayoutListener(new TableEvents().setTableMiddleSelection);
         new InitialTableLoader().execute();
     }
 
@@ -124,7 +128,29 @@ class Table{
 
         protected void onPostExecute(ListViewAdapter adapter){
             table.setAdapter(adapter);
-            table.setSelection(100);
         }
+    }
+
+    private class TableEvents {
+        ViewTreeObserver.OnGlobalLayoutListener setTableMiddleSelection = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!alreadyCentered) {
+                    int height = table.getMeasuredHeight();
+                    int rowHeight = 0;
+
+                    // Get row height, but it might not be created yet
+                    if (table.getChildAt(0) != null)
+                        rowHeight = table.getChildAt(0).getHeight();
+
+                    // Center 0
+                    table.setSelectionFromTop(size / 2, height / 2 - rowHeight / 2);
+
+                    // When view is FINALLY inflated, we don't need to do this anymore
+                    if (height > 0)
+                        alreadyCentered = true;
+                }
+            }
+        };
     }
 }
