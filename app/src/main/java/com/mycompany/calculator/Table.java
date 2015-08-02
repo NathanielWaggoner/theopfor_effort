@@ -147,8 +147,12 @@ class Table{
                     table.setSelectionFromTop(size / 2, height / 2 - rowHeight / 2);
 
                     // When view is FINALLY inflated, we don't need to do this anymore
-                    if (height > 0)
+                    if (height > 0) {
                         alreadyCentered = true;
+
+                        // Hide progress bar
+                        ((View)table.getParent()).findViewById(R.id.TableLoadProgressBar).setVisibility(View.GONE);
+                    }
                 }
             }
         };
