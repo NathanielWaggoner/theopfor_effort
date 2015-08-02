@@ -2,6 +2,7 @@ package com.mycompany.calculator;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ class Table{
     }
 
     private class ListViewAdapter extends BaseAdapter {
+        int rowHeight;
 
         private class ViewHolder{
             TextView xValue;
@@ -91,6 +93,7 @@ class Table{
                 ViewHolder holder = new ViewHolder();
                 LayoutInflater inflater = activity.getLayoutInflater();
                 v = inflater.inflate(R.layout.table_graph_row, parent, false);
+                rowHeight = v.getHeight();
 
                 holder.xValue = (TextView) v.findViewById(R.id.XValue);
                 holder.y1 = (TextView) v.findViewById(R.id.Y1Value);
@@ -105,13 +108,15 @@ class Table{
         }
     }
 
-    private class InitialTableLoader extends AsyncTask<String, Void, ListViewAdapter>{
+    private class InitialTableLoader extends AsyncTask<String, Void, ListViewAdapter> {
 
         @Override
         protected ListViewAdapter doInBackground(String... params) {
+            int top = size / 2;
+            int bottom = 0 - size / 2;
             // Generate N items into an ArrayList and Adapter
-            for (Double i = 0.0; i < size; i++){
-                append(i);
+            for (int i = bottom; i < top; i++){
+                append((double) i);
             }
 
             return adapter;
@@ -119,6 +124,7 @@ class Table{
 
         protected void onPostExecute(ListViewAdapter adapter){
             table.setAdapter(adapter);
+            table.setSelection(100);
         }
     }
 }
