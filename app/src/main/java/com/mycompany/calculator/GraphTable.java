@@ -26,7 +26,7 @@ public class GraphTable extends Fragment {
     private Equation e;
     private final String X_KEY = "X";
     private final String Y1_KEY = "Y1";
-    final int capacity = 10;
+    final int capacity = 200;
     private OnFragmentInteractionListener mListener;
     Table table;
 
