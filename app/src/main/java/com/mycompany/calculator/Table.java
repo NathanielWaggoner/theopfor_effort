@@ -2,7 +2,6 @@ package com.mycompany.calculator;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,20 @@ class Table{
 
         table.getViewTreeObserver().addOnGlobalLayoutListener(new TableEvents().setTableMiddleSelection);
         new InitialTableLoader().execute();
+    }
+
+    public void reload(){
+        table.setAdapter(null);
+        list.clear();
+        alreadyCentered = false;
+        ((View)table.getParent()).findViewById(R.id.TableLoadProgressBar).setVisibility(View.VISIBLE);
+        new InitialTableLoader().execute();
+
+    }
+
+    public void changeEquation(Equation e){
+        equation = e;
+        reload();
     }
 
     public void append(Double xValue) {
@@ -147,7 +160,7 @@ class Table{
                     table.setSelectionFromTop(size / 2, height / 2 - rowHeight / 2);
 
                     // When view is FINALLY inflated, we don't need to do this anymore
-                    if (height > 0) {
+                    if (table.getCount() == size) {
                         alreadyCentered = true;
 
                         // Hide progress bar

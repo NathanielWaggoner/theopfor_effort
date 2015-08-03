@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,6 +26,7 @@ public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFr
 
     SharedPreferences prefs;
     SharedPreferences.Editor prefsEdit;
+    GraphTable tableFragment;
 
     @Override
     public void onFragmentInteraction(Uri uri) {}
@@ -47,6 +50,13 @@ public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFr
         }
         // Apply changes
         prefsEdit.commit();
+
+        // Setup fragments - Display table
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        tableFragment = new GraphTable();
+        transaction.add(R.id.FragmentContainer, tableFragment);
+        transaction.commit();
 
         // find toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -105,6 +115,7 @@ public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFr
             Spinner spinner = (Spinner) findViewById(R.id.GraphEquationSpinner);
             String key = "Y" + Integer.toString(spinner.getSelectedItemPosition() + 1);
             display.setText(prefs.getString(key, ""));
+            tableFragment.changeEquation(new Equation(prefs.getString(key, "")));
         }
     }
 

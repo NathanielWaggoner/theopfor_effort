@@ -23,7 +23,7 @@ public class GraphTable extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
-    private Equation e;
+    private Equation equation;
     private final String X_KEY = "X";
     private final String Y1_KEY = "Y1";
     final int capacity = 200;
@@ -34,14 +34,14 @@ public class GraphTable extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param equation Equation to display
+     * @param e Equation to display
      * @return A new instance of fragment GraphTable.
      */
     // TODO: Rename and change types and number of parameters
-    public static GraphTable newInstance(String equation) {
+    public static GraphTable newInstance(String e) {
         GraphTable fragment = new GraphTable();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, equation);
+        args.putString(ARG_PARAM1, e);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,10 +54,10 @@ public class GraphTable extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            e = new Equation(getArguments().getString(ARG_PARAM1));
+            equation = new Equation(getArguments().getString(ARG_PARAM1));
         }
         else{
-            e = new Equation(getActivity().getSharedPreferences("Equations", 0).getString("Y1", "x"));
+            equation = new Equation(getActivity().getSharedPreferences("Equations", 0).getString("Y1", "x"));
         }
     }
 
@@ -66,7 +66,7 @@ public class GraphTable extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph_table, container, false);
-        table = new Table((ListView) v.findViewById(R.id.TableListView), capacity, e, getActivity());
+        table = new Table((ListView) v.findViewById(R.id.TableListView), capacity, equation, getActivity());
         return v;
     }
 
@@ -107,5 +107,10 @@ public class GraphTable extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void changeEquation(Equation e){
+        equation = e;
+        table.changeEquation(e);
     }
 }
