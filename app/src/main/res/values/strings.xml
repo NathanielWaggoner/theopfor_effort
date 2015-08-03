@@ -29,6 +29,8 @@
         <item>Y5</item>
         <item>Y6</item>
     </string-array>
+
     <string name="title_activity_graphing_entry_screen">Enter Equation</string>
+    <string name="LoadingText">Loading</string>
 
 </resources>

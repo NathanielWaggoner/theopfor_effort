@@ -2,11 +2,14 @@ package com.mycompany.calculator;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +27,7 @@ class Table{
     ListViewAdapter adapter;
     ArrayList<HashMap<String, Double>> list;
     Activity activity;
+    LinearLayout loadingView;
 
     boolean alreadyCentered = false;
 
@@ -45,7 +49,6 @@ class Table{
         alreadyCentered = false;
         ((View)table.getParent()).findViewById(R.id.TableLoadProgressBar).setVisibility(View.VISIBLE);
         new InitialTableLoader().execute();
-
     }
 
     public void changeEquation(Equation e){
@@ -131,16 +134,26 @@ class Table{
         protected ListViewAdapter doInBackground(String... params) {
             int top = size / 2;
             int bottom = 0 - size / 2;
+
             // Generate N items into an ArrayList and Adapter
-            for (int i = bottom; i < top; i++){
+            for (int i = bottom; i < top; i++) {
                 append((double) i);
+            }
+
+            if (loadingView == null) {
+                loadingView = (LinearLayout) activity.getLayoutInflater().inflate(R.layout.table_loading_bar, null);
+                loadingView.setGravity(Gravity.CENTER_HORIZONTAL);
             }
 
             return adapter;
         }
 
         protected void onPostExecute(ListViewAdapter adapter){
+            table.addFooterView(loadingView);
+            table.addHeaderView(loadingView);
             table.setAdapter(adapter);
+            table.removeFooterView(loadingView);
+            table.removeHeaderView(loadingView);
         }
     }
 
@@ -160,7 +173,7 @@ class Table{
                     table.setSelectionFromTop(size / 2, height / 2 - rowHeight / 2);
 
                     // When view is FINALLY inflated, we don't need to do this anymore
-                    if (table.getCount() == size) {
+                    if (table.getCount() >= size) {
                         alreadyCentered = true;
 
                         // Hide progress bar
