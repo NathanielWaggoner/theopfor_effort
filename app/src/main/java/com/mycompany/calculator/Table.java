@@ -2,11 +2,13 @@ package com.mycompany.calculator;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -30,6 +32,7 @@ class Table{
     LinearLayout loadingView;
 
     boolean alreadyCentered = false;
+    boolean currentlyLoading = true;
 
     Table(ListView listView, int capacity, Equation e, Activity a){
         table = listView;
@@ -39,7 +42,10 @@ class Table{
         activity = a;
         list = new ArrayList<>();
 
-        table.getViewTreeObserver().addOnGlobalLayoutListener(new TableEvents().setTableMiddleSelection);
+        TableEvents events = new TableEvents();
+        table.getViewTreeObserver().addOnGlobalLayoutListener(events.setTableMiddleSelection);
+        table.setOnScrollListener(events.autoGrowth);
+
         new InitialTableLoader().execute();
     }
 
@@ -47,6 +53,7 @@ class Table{
         table.setAdapter(null);
         list.clear();
         alreadyCentered = false;
+        currentlyLoading = true;
         ((View)table.getParent()).findViewById(R.id.TableLoadProgressBar).setVisibility(View.VISIBLE);
         new InitialTableLoader().execute();
     }
@@ -175,10 +182,35 @@ class Table{
                     // When view is FINALLY inflated, we don't need to do this anymore
                     if (table.getCount() >= size) {
                         alreadyCentered = true;
+                        currentlyLoading = false;
 
                         // Hide progress bar
                         ((View)table.getParent()).findViewById(R.id.TableLoadProgressBar).setVisibility(View.GONE);
                     }
+                }
+            }
+        };
+
+        AbsListView.OnScrollListener autoGrowth = new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int state) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisible, int visibleItemCount, int totalItemCount) {
+                if (currentlyLoading)
+                    return;
+
+                double topThreshold = .25*size - 1;     // 1/4 of the way up
+                double bottomThreshold = .75*size - 1;  // 3/4 of the way down
+
+                if (firstVisible <= topThreshold){
+                    currentlyLoading = true;
+                    table.addHeaderView(loadingView);
+                    table.setSelection(firstVisible + 2);
+                }
+                else if(firstVisible + visibleItemCount >= bottomThreshold){
+                    currentlyLoading = true;
+                    table.addFooterView(loadingView);
                 }
             }
         };
