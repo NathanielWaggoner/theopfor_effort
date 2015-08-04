@@ -2,7 +2,6 @@ package com.mycompany.calculator;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,10 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
+
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,7 +171,7 @@ class Table{
             double lastX = list.get(0).get(X_KEY);
 
             // Add size/2 items.
-            for (int i = (int)lastX; i >= lastX - size / 2; i--){
+            for (int i = ((int)lastX) - 1; i >= lastX - size / 2; i--){
                 prepend((double)i);
                 removeEnd();
             }
@@ -183,9 +180,46 @@ class Table{
         }
 
         protected void onPostExecute(ListViewAdapter adapt) {
-            adapt.notifyDataSetChanged();
-
             table.removeHeaderView(loadingView);
+
+            // Data set is changed, but keep position
+            int index = table.getFirstVisiblePosition() + size/2;
+            View v = table.getChildAt(table.getHeaderViewsCount());
+            int top = v.getTop();
+            adapt.notifyDataSetChanged();
+            table.setSelectionFromTop(index, top);
+
+
+            currentlyLoading = false;
+        }
+    }
+
+    private class LoadDown extends AsyncTask<String, Void, ListViewAdapter> {
+
+        @Override
+        protected ListViewAdapter doInBackground(String... params) {
+
+            double lastX = list.get(list.size() - 1).get(X_KEY);
+
+            // Add size/2 items.
+            for (int i = ((int)lastX) + 1; i <= lastX + size / 2; i++){
+                append((double)i);
+                removeStart();
+            }
+
+            return adapter;
+        }
+
+        protected void onPostExecute(ListViewAdapter adapt) {
+            table.removeFooterView(loadingView);
+
+            // Data set is changed, but keep position
+            int index = table.getFirstVisiblePosition() - size/2;
+            View v = table.getChildAt(table.getHeaderViewsCount());
+            int top = v.getTop();
+            adapt.notifyDataSetChanged();
+            table.setSelectionFromTop(index, top);
+
             currentlyLoading = false;
         }
     }
@@ -233,11 +267,12 @@ class Table{
                     currentlyLoading = true;
                     table.addHeaderView(loadingView);
                     table.setSelection(firstVisible + 2);
-                     new LoadUp().execute();
+                    new LoadUp().execute();
                 }
                 else if(firstVisible + visibleItemCount >= size){
                     currentlyLoading = true;
                     table.addFooterView(loadingView);
+                    new LoadDown().execute();
                 }
             }
         };
