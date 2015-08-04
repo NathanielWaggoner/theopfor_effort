@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -82,7 +84,7 @@ class Table{
     }
 
     public void removeEnd() {
-        list.remove(size - 1);
+        list.remove(size + 1);
     }
 
     private class ListViewAdapter extends BaseAdapter {
@@ -139,7 +141,7 @@ class Table{
 
         @Override
         protected ListViewAdapter doInBackground(String... params) {
-            int top = size / 2;
+            int top = size / 2 + 1;
             int bottom = 0 - size / 2;
 
             // Generate N items into an ArrayList and Adapter
@@ -155,12 +157,37 @@ class Table{
             return adapter;
         }
 
-        protected void onPostExecute(ListViewAdapter adapter){
+        protected void onPostExecute(ListViewAdapter adapt){
             table.addFooterView(loadingView);
             table.addHeaderView(loadingView);
-            table.setAdapter(adapter);
+            table.setAdapter(adapt);
             table.removeFooterView(loadingView);
             table.removeHeaderView(loadingView);
+        }
+    }
+
+    private class LoadUp extends AsyncTask<String, Void, ListViewAdapter> {
+
+        @Override
+        protected ListViewAdapter doInBackground(String... params) {
+
+            double lastX = list.get(0).get(X_KEY);
+
+            // Add size/2 items. One less delete to make it an even 100-200 not 101-200
+            int k = 0;
+            for (int i = (int)lastX; i >= lastX - size / 2; i--){
+                prepend((double)i);
+                removeEnd();
+            }
+
+            return adapter;
+        }
+
+        protected void onPostExecute(ListViewAdapter adapt) {
+            adapt.notifyDataSetChanged();
+
+            table.removeHeaderView(loadingView);
+            currentlyLoading = false;
         }
     }
 
@@ -200,15 +227,16 @@ class Table{
                 if (currentlyLoading)
                     return;
 
-                double topThreshold = .25*size - 1;     // 1/4 of the way up
-                double bottomThreshold = .75*size - 1;  // 3/4 of the way down
+                /*double topThreshold = .25*size - 1;     // 1/4 of the way up
+                double bottomThreshold = .75*size - 1;  // 3/4 of the way down*/
 
-                if (firstVisible <= topThreshold){
+                if (firstVisible <= 0){
                     currentlyLoading = true;
                     table.addHeaderView(loadingView);
                     table.setSelection(firstVisible + 2);
+                     new LoadUp().execute();
                 }
-                else if(firstVisible + visibleItemCount >= bottomThreshold){
+                else if(firstVisible + visibleItemCount >= size){
                     currentlyLoading = true;
                     table.addFooterView(loadingView);
                 }
