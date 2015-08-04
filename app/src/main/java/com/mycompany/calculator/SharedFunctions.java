@@ -26,8 +26,10 @@ public class SharedFunctions{
                     view.getContext().startActivity(newScreen);
                     break;
                 case "Graphing ":
-                    newScreen = new Intent(view.getContext(), GraphingScreen.class);
-                    view.getContext().startActivity(newScreen);
+                    if (view.getContext() != null) {
+                        newScreen = new Intent(view.getContext(), GraphingScreen.class);
+                        view.getContext().startActivity(newScreen);
+                    }
                     break;
             }
         }

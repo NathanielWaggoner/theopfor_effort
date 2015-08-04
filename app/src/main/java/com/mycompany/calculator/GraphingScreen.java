@@ -126,6 +126,7 @@ public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFr
             String value = prefs.getString(key, "");
             display.setText(value);
             Log.i("GRAPHING", key + " set to " + value);
+            tableFragment.changeEquation(new Equation(value));
         }
 
         public void onNothingSelected(AdapterView<?> parent) {}

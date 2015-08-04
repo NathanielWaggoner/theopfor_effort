@@ -110,7 +110,9 @@ public class GraphTable extends Fragment {
     }
 
     public void changeEquation(Equation e){
-        equation = e;
-        table.changeEquation(e);
+        if (!e.equation.equals(equation.equation)) {
+            equation = e;
+            table.changeEquation(e);
+        }
     }
 }
