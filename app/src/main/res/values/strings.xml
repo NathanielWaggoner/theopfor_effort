@@ -32,5 +32,8 @@
 
     <string name="title_activity_graphing_entry_screen">Enter Equation</string>
     <string name="LoadingText">Loading</string>
+    <string name="Start">Start:</string>
+    <string name="Step">Step:</string>
+    <string name="Enter">Enter</string>
 
 </resources>
