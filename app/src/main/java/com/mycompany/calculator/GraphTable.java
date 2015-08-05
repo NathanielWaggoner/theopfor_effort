@@ -1,12 +1,16 @@
 package com.mycompany.calculator;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
@@ -29,6 +33,8 @@ public class GraphTable extends Fragment {
     final int capacity = 200;
     private OnFragmentInteractionListener mListener;
     Table table;
+
+    View.OnClickListener enterKeyListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -59,6 +65,17 @@ public class GraphTable extends Fragment {
         else{
             equation = new Equation(getActivity().getSharedPreferences("Equations", 0).getString("Y1", "x"));
         }
+
+        enterKeyListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout container = (LinearLayout) v.getParent();
+                double start = Double.parseDouble(((EditText)container.findViewById(R.id.StartValue)).getText().toString());
+                double step = Double.parseDouble(((EditText) container.findViewById(R.id.StepValue)).getText().toString());
+                table.changeProperties(start, step);
+                Log.i("Table", "Changing start: " + start + " and step: " + step);
+            }
+        };
     }
 
     @Override
@@ -67,6 +84,7 @@ public class GraphTable extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph_table, container, false);
         table = new Table((ListView) v.findViewById(R.id.TableListView), capacity, equation, getActivity());
+        v.findViewById(R.id.StartStepEnter).setOnClickListener(enterKeyListener);
         return v;
     }
 

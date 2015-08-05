@@ -33,6 +33,9 @@ class Table{
     boolean alreadyCentered = false;
     boolean currentlyLoading = true;
 
+    double start;
+    double step;
+
     Table(ListView listView, int capacity, Equation e, Activity a){
         table = listView;
         size = capacity;
@@ -40,6 +43,11 @@ class Table{
         adapter = new ListViewAdapter();
         activity = a;
         list = new ArrayList<>();
+        start = 0;
+        step = 1;
+
+        loadingView = (LinearLayout) activity.getLayoutInflater().inflate(R.layout.table_loading_bar, null);
+        loadingView.setGravity(Gravity.CENTER_HORIZONTAL);
 
         TableEvents events = new TableEvents();
         table.getViewTreeObserver().addOnGlobalLayoutListener(events.setTableMiddleSelection);
@@ -82,6 +90,14 @@ class Table{
 
     public void removeEnd() {
         list.remove(size + 1);
+    }
+
+    public void changeProperties(double startValue, double stepValue) {
+        if (start != startValue || step != stepValue) {
+            start = startValue;
+            step = stepValue;
+            reload();
+        }
     }
 
     private class ListViewAdapter extends BaseAdapter {
@@ -143,12 +159,7 @@ class Table{
 
             // Generate N items into an ArrayList and Adapter
             for (int i = bottom; i < top; i++) {
-                append((double) i);
-            }
-
-            if (loadingView == null) {
-                loadingView = (LinearLayout) activity.getLayoutInflater().inflate(R.layout.table_loading_bar, null);
-                loadingView.setGravity(Gravity.CENTER_HORIZONTAL);
+                append(start + i * step);
             }
 
             return adapter;
@@ -172,7 +183,7 @@ class Table{
 
             // Add size/2 items.
             for (int i = ((int)lastX) - 1; i >= lastX - size / 2; i--){
-                prepend((double)i);
+                prepend(start + i*step);
                 removeEnd();
             }
 
@@ -203,7 +214,7 @@ class Table{
 
             // Add size/2 items.
             for (int i = ((int)lastX) + 1; i <= lastX + size / 2; i++){
-                append((double)i);
+                append(start + i*step);
                 removeStart();
             }
 
