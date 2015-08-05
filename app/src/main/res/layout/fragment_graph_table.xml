@@ -3,6 +3,55 @@
     android:layout_height="match_parent" tools:context="com.mycompany.calculator.GraphTable"
     android:orientation="vertical">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout4" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Start"
+            android:id="@+id/textView4"
+            android:textSize="25sp"
+            android:layout_gravity="center_vertical" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/StartValue"
+            android:layout_weight="1"
+            android:inputType="number|numberSigned|numberDecimal"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Step"
+            android:id="@+id/textView5"
+            android:textSize="25sp"
+            android:layout_gravity="center_vertical" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/StepValue"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:inputType="number|numberSigned|numberDecimal"
+            android:layout_gravity="center_vertical" />
+
+        <Button
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Enter"
+            android:id="@+id/button2"
+            android:layout_weight="0.12"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
