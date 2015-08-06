@@ -87,6 +87,14 @@ public class CalculatorScreen extends AppCompatActivity implements BasicKeypad.O
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Reset spinner to show Calculator, otherwise Graphing is shown.
+        ((Spinner) findViewById(R.id.ToolbarSpinner)).setSelection(0);
+    }
+
     public void delete(View view){
         Input.backspace((EditText) findViewById(R.id.Equation));
     }
