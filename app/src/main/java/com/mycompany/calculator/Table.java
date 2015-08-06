@@ -2,6 +2,7 @@ package com.mycompany.calculator;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +90,7 @@ class Table{
     }
 
     public void removeEnd() {
-        list.remove(size + 1);
+        list.remove(size);
     }
 
     public void changeProperties(double startValue, double stepValue) {
@@ -154,7 +155,7 @@ class Table{
 
         @Override
         protected ListViewAdapter doInBackground(String... params) {
-            int top = size / 2 + 1;
+            int top = size / 2;
             int bottom = 0 - size / 2;
 
             // Generate N items into an ArrayList and Adapter
@@ -171,6 +172,8 @@ class Table{
             table.setAdapter(adapt);
             table.removeFooterView(loadingView);
             table.removeHeaderView(loadingView);
+
+            Log.i("TableLoading", "Finished initial load");
         }
     }
 
@@ -201,7 +204,7 @@ class Table{
             adapt.notifyDataSetChanged();
             table.setSelectionFromTop(index, top);
 
-
+            Log.i("TableLoading", "Finished loading up");
             currentlyLoading = false;
         }
     }
@@ -233,6 +236,7 @@ class Table{
             adapt.notifyDataSetChanged();
             table.setSelectionFromTop(index, top);
 
+            Log.i("TableLoading", "Finished loading down");
             currentlyLoading = false;
         }
     }
