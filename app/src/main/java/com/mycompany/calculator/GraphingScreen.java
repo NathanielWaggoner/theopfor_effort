@@ -1,11 +1,15 @@
 package com.mycompany.calculator;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,11 +26,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFragmentInteractionListener {
+public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFragmentInteractionListener, GraphGraph.OnFragmentInteractionListener {
 
     SharedPreferences prefs;
     SharedPreferences.Editor prefsEdit;
     GraphTable tableFragment;
+    GraphGraph graphFragment;
 
     @Override
     public void onFragmentInteraction(Uri uri) {}
@@ -51,12 +56,11 @@ public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFr
         // Apply changes
         prefsEdit.commit();
 
-        // Setup fragments - Display table
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
+        // Setup fragments
         tableFragment = new GraphTable();
-        transaction.add(R.id.FragmentContainer, tableFragment);
-        transaction.commit();
+        graphFragment = new GraphGraph();
+        ViewPager pager = (ViewPager)findViewById(R.id.GraphTablePager);
+        pager.setAdapter(new GraphTablePagerAdapter(getSupportFragmentManager(), getApplicationContext()));
 
         // find toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -141,5 +145,41 @@ public class GraphingScreen extends AppCompatActivity implements GraphTable.OnFr
         newActivity.putExtra("equation", display.getText());
         Log.i("GRAPHING", key);
         startActivityForResult(newActivity, 0);
+    }
+
+    private class GraphTablePagerAdapter extends FragmentPagerAdapter{
+        Context context;
+
+        public GraphTablePagerAdapter(FragmentManager fm, Context mContext) {
+            super(fm);
+            context = mContext;
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch (pos){
+                case 0:
+                    return graphFragment;
+                case 1:
+                    return tableFragment;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int pos){
+            switch (pos){
+                case 0:
+                    return getString(R.string.Graph);
+                case 1:
+                    return getString(R.string.Table);
+            }
+            return null;
+        }
     }
 }

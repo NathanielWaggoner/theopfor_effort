@@ -39,12 +39,14 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+        <android.support.v4.view.ViewPager android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/FragmentContainer"
-            android:layout_below="@+id/linearLayout3"></LinearLayout>
+            android:layout_below="@+id/linearLayout3"
+            android:id="@+id/GraphTablePager">
+            <android.support.v4.view.PagerTabStrip android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/GraphTableTabs" />
+        </android.support.v4.view.ViewPager>
 
     </RelativeLayout>
 </RelativeLayout>
