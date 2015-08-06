@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="com.mycompany.calculator.GraphTable"
-    android:orientation="vertical">
+    android:orientation="vertical" android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -24,8 +25,13 @@
             android:layout_weight="1"
             android:inputType="number|numberSigned|numberDecimal"
             android:textSize="20sp"
-            android:layout_gravity="center_vertical"
-            android:text="0" />
+            android:text="0"
+            android:textAlignment="center"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:imeOptions="actionDone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,8 +48,13 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:inputType="number|numberSigned|numberDecimal"
-            android:layout_gravity="center_vertical"
-            android:text="1" />
+            android:text="1"
+            android:textAlignment="center"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:imeOptions="actionDone"/>
 
         <Button
             android:layout_width="62dp"
