@@ -180,6 +180,7 @@ class Table{
         protected ListViewAdapter doInBackground(String... params) {
 
             double lastX = list.get(0).get(X_KEY);
+            lastX = lastX/step - (start/step);
 
             // Add size/2 items.
             for (int i = ((int)lastX) - 1; i >= lastX - size / 2; i--){
@@ -211,6 +212,7 @@ class Table{
         protected ListViewAdapter doInBackground(String... params) {
 
             double lastX = list.get(list.size() - 1).get(X_KEY);
+            lastX = lastX/step - (start/step);
 
             // Add size/2 items.
             for (int i = ((int)lastX) + 1; i <= lastX + size / 2; i++){
