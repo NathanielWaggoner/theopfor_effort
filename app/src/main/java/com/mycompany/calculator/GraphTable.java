@@ -1,17 +1,22 @@
 package com.mycompany.calculator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 /**
@@ -35,6 +40,7 @@ public class GraphTable extends Fragment {
     Table table;
 
     View.OnClickListener enterKeyListener;
+    TextView.OnEditorActionListener closeOnDone;
 
     /**
      * Use this factory method to create a new instance of
@@ -74,6 +80,27 @@ public class GraphTable extends Fragment {
                 double step = Double.parseDouble(((EditText) container.findViewById(R.id.StepValue)).getText().toString());
                 table.changeProperties(start, step);
                 Log.i("Table", "Changing start: " + start + " and step: " + step);
+
+                // Close keyboard and clear focus
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                getView().findViewById(R.id.StartValue).clearFocus();
+                getView().findViewById(R.id.StepValue).clearFocus();
+            }
+        };
+
+        closeOnDone = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    v.clearFocus();
+
+                    // Close keyboard
+                    InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                }
+                return false;
             }
         };
     }
@@ -85,6 +112,8 @@ public class GraphTable extends Fragment {
         View v = inflater.inflate(R.layout.fragment_graph_table, container, false);
         table = new Table((ListView) v.findViewById(R.id.TableListView), capacity, equation, getActivity());
         v.findViewById(R.id.StartStepEnter).setOnClickListener(enterKeyListener);
+        ((EditText)v.findViewById(R.id.StepValue)).setOnEditorActionListener(closeOnDone);
+        ((EditText)v.findViewById(R.id.StartValue)).setOnEditorActionListener(closeOnDone);
         return v;
     }
 
