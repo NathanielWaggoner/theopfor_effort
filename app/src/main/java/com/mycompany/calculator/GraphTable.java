@@ -69,7 +69,7 @@ public class GraphTable extends Fragment {
             equation = new Equation(getArguments().getString(ARG_PARAM1));
         }
         else{
-            equation = new Equation(getActivity().getSharedPreferences("Equations", 0).getString("Y1", "x"));
+            equation = new Equation(getActivity().getSharedPreferences("Equations", 0).getString("Y1", "0"));
         }
 
         enterKeyListener = new View.OnClickListener() {
