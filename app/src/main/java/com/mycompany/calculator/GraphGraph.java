@@ -55,7 +55,8 @@ public class GraphGraph extends Fragment {
         v.post(new Runnable() {
             @Override
             public void run() {
-                graph = new Graph(equation, v.findViewById(R.id.GraphView), v.getContext());
+                graph = (Graph) v.findViewById(R.id.GraphView);
+                graph.changeEquation(equation);
             }
         });
         return v;
