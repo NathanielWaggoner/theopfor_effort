@@ -9,7 +9,7 @@ public class Equation{
     }
     
     void changeEquation(String newEquation){
-        if (newEquation == null)
+        if (newEquation == null || newEquation.equals(""))
             equation = Core.spaceString("x");
         else
             equation = Core.spaceString(newEquation);
