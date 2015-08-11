@@ -9,7 +9,10 @@ public class Equation{
     }
     
     void changeEquation(String newEquation){
-        equation = Core.spaceString(newEquation);
+        if (newEquation == null)
+            equation = Core.spaceString("x");
+        else
+            equation = Core.spaceString(newEquation);
     }
     
     double getY(double x){

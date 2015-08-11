@@ -1,8 +1,6 @@
 package com.mycompany.calculator;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,12 +10,20 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class Graph extends SurfaceView implements SurfaceHolder.Callback {
-    Paint paint;
-    Equation equation;
 
+    // Pixels per showed cell
     int xPPC;
     int yPPC;
+
     int pixelOffset;
+
+    // Starting dimensions shown to user
+    int yDimension = 10;
+    int xDimension = 10;
+
+    Paint BGPaint;
+    Paint paint;
+    Equation equation;
     DrawThread thread;
     Context context;
 
@@ -40,13 +46,17 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void init(){
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.id.GraphView);
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
+        equation = new Equation(context.getSharedPreferences("Equations", 0).getString("Y1", "x"));
 
         paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
+
+        BGPaint = new Paint();
+        BGPaint.setStyle(Paint.Style.FILL);
+        BGPaint.setColor(Color.WHITE);
     }
 
     @Override
@@ -79,12 +89,12 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     // Convert pixels to X Coordinate
-    public double getXCoord(int pixel) {
+    private double getXCoord(int pixel) {
         return (float)(pixel + pixelOffset) / xPPC;
     }
 
     // Converts y coordinate to pixels
-    public int getYPixel(double y){
+    private int getYPixel(double y){
         return (int)y * yPPC - pixelOffset;
     }
 
@@ -93,13 +103,15 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public class DrawThread extends Thread{
-        boolean running;
         SurfaceHolder holder;
         Canvas canvas;
         Context context;
         Graph graph;
+
         int width;
         int height;
+        boolean running;
+        boolean alreadyDrawn;
 
         DrawThread(SurfaceHolder mHolder, Context mContext, Graph g){
             holder = mHolder;
@@ -108,19 +120,34 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
             running = false;
             width = g.getWidth();
             height = g.getHeight();
+            alreadyDrawn = false;
+            yPPC = height / yDimension;
+            xPPC = width / xDimension;
+            pixelOffset = -(width/2);
         }
 
-        void setRunning(boolean status){
+        public void setRunning(boolean status){
             running = status;
         }
 
-        void setSurfaceSize(int w, int h){
+        public void setSurfaceSize(int w, int h){
             width = w;
             height = h;
         }
 
         void doDraw(Canvas canvas) {
-            canvas.drawPaint(paint);
+            alreadyDrawn = true;
+
+            // Draw background
+            canvas.drawPaint(BGPaint);
+            Log.i("GraphDraw", "Drew BG");
+
+            // Draw points
+            for (int i = 0; i < height; i++){
+                double yCoord = equation.getY(getXCoord(i));
+                canvas.drawPoint(i, getYPixel(yCoord), paint);
+            }
+            Log.i("GraphDraw", "Points drawn");
         }
 
         @Override
@@ -128,11 +155,17 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
             super.run();
 
             while(running){
-                canvas = holder.lockCanvas();
+                if (!holder.getSurface().isValid())
+                    continue;
 
-                if(canvas != null){
-                    doDraw(canvas);
-                    holder.unlockCanvasAndPost(canvas);
+                if (!alreadyDrawn) {
+                    canvas = holder.lockCanvas();
+
+                    if (canvas != null) {
+                        doDraw(canvas);
+
+                        holder.unlockCanvasAndPost(canvas);
+                    }
                 }
             }
         }
