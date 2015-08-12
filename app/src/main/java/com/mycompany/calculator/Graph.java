@@ -50,18 +50,26 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         equation = new Equation(context.getSharedPreferences("Equations", 0).getString("Y1", "x"));
 
+        // Set paint for points
         paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(3);
 
+        // Set paint for background
         BGPaint = new Paint();
         BGPaint.setStyle(Paint.Style.FILL);
         BGPaint.setColor(Color.WHITE);
+
+        // For getting events
+        setFocusable(true);
+
+        // Setup thread
+        thread = new DrawThread(holder, context, this);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        thread = new DrawThread(holder, getContext(), this);
         thread.setRunning(true);
         thread.start();
     }
@@ -113,6 +121,8 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
         boolean running;
         boolean alreadyDrawn;
 
+        float points[];
+
         DrawThread(SurfaceHolder mHolder, Context mContext, Graph g){
             holder = mHolder;
             context = mContext;
@@ -124,6 +134,15 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
             yPPC = height / yDimension;
             xPPC = width / xDimension;
             pixelOffset = -(width/2);
+            points = new float[width*2];
+
+            // Generate points
+            for (int i = 0; i < width; i++){
+                double yCoord = equation.getY(getXCoord(i));
+                points[i*2] = i;
+                points[i*2+1] = getYPixel((float)yCoord);
+                Log.i("Point", "(" + i + ", " + getYPixel((float)yCoord) + ")");
+            }
         }
 
         public void setRunning(boolean status){
@@ -142,11 +161,7 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawPaint(BGPaint);
             Log.i("GraphDraw", "Drew BG");
 
-            // Draw points
-            for (int i = 0; i < height; i++){
-                double yCoord = equation.getY(getXCoord(i));
-                canvas.drawPoint(i, getYPixel(yCoord), paint);
-            }
+            canvas.drawLines(points, paint);
             Log.i("GraphDraw", "Points drawn");
         }
 
@@ -159,6 +174,7 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
                     continue;
 
                 if (!alreadyDrawn) {
+                    Log.i("Graph", "Drawing");
                     canvas = holder.lockCanvas();
 
                     if (canvas != null) {

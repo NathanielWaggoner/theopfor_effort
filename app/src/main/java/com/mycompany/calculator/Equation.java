@@ -11,13 +11,15 @@ public class Equation{
     void changeEquation(String newEquation){
         if (newEquation == null || newEquation.equals(""))
             equation = Core.spaceString("x");
-        else
+        else {
             equation = Core.spaceString(newEquation);
+            equation = Core.postfixConversion(equation);
+        }
     }
     
     double getY(double x){
         String e = equation.replaceAll("x", Double.toString(x));
-        e = Core.postfixConversion(e);
+
         return Core.solve(e);
     }
 }

@@ -222,6 +222,11 @@ public class Core{
 			else{
 				// get the character, but ignore spaces
 				String c = read.next().toString();
+
+				if (c.equals("x")){
+					postfix.append(c);
+					postfix.append(" ");
+				}
 				if (!c.equals(" ")){
 					
 					// if stack is empty, just put it on
