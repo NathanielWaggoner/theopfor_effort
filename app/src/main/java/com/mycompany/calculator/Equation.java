@@ -9,12 +9,17 @@ public class Equation{
     }
     
     void changeEquation(String newEquation){
-        equation = Core.spaceString(newEquation);
+        if (newEquation == null || newEquation.equals(""))
+            equation = Core.spaceString("x");
+        else {
+            equation = Core.spaceString(newEquation);
+            equation = Core.postfixConversion(equation);
+        }
     }
     
     double getY(double x){
         String e = equation.replaceAll("x", Double.toString(x));
-        e = Core.postfixConversion(e);
+
         return Core.solve(e);
     }
 }
