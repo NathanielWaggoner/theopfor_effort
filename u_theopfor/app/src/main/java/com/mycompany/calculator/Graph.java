@@ -192,7 +192,6 @@ public class Graph extends SurfaceView implements SurfaceHolder.Callback {
         @Override
         public void run(){
             super.run();
-
             while(running){
                 if(points == null) {
                     continue;
